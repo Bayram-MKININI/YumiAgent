@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<net.noliaware.yumi_agent.feature_auth.presentation.views.BOSignInParentView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/background_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha=".15"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_view_background" />
+
+    <View
+        android:id="@+id/header_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary" />
+
+    <include layout="@layout/back_layout" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/profile_icon_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/colorPrimaryLight"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="16dp"
+        app:cardPreventCornerOverlap="false">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_profile_on" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <net.noliaware.yumi_agent.feature_auth.presentation.views.BOSignInView
+        android:id="@+id/bo_sign_in_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/description_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/omnes_regular"
+            android:gravity="center"
+            android:text="@string/bo_sign_in_description"
+            android:textColor="@color/grey_2"
+            android:textSize="15sp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/code_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/omnes_semibold_regular"
+            android:gravity="center"
+            android:letterSpacing="0.2"
+            android:textColor="@color/grey_2"
+            android:textSize="35sp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/bo_code_expiration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/omnes_regular"
+            android:gravity="center"
+            android:text="@string/bo_code_expiration"
+            android:textColor="@color/grey_2"
+            android:textSize="15sp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/timestamp_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/omnes_semibold_regular"
+            android:gravity="center"
+            android:textColor="@color/grey_2"
+            android:textSize="35sp" />
+    </net.noliaware.yumi_agent.feature_auth.presentation.views.BOSignInView>
+</net.noliaware.yumi_agent.feature_auth.presentation.views.BOSignInParentView>
