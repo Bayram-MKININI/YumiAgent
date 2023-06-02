@@ -60,7 +60,7 @@ class MailRecipientListView @JvmOverloads constructor(
     }
 
     private fun validateMail(mail: String) {
-        if (mail.isNotEmpty()) {
+        if (mail.isNotEmpty() && recipientEditText.isEnabled) {
             addEmailText(mail)
         }
     }
