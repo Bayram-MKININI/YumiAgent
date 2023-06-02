@@ -55,11 +55,11 @@ jobs:
       - name: Upload APK Release
         uses: actions/upload-artifact@v3
         with:
-          name: Yumi Retail APK - ${{ env.RELEASE_DATE }}
+          name: Yumi Agent APK - ${{ env.RELEASE_DATE }}
           path: app/build/outputs/apk/release/
 
       - name: Upload AAB Release
         uses: actions/upload-artifact@v3
         with:
-          name: Yumi Retail AAB - ${{ env.RELEASE_DATE }}
+          name: Yumi Agent AAB - ${{ env.RELEASE_DATE }}
           path: app/build/outputs/bundle/release/
