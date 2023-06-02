@@ -185,7 +185,7 @@ class SendMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
                     if (visibleRect.height() == screenHeight) {
                         convertDpToPx(50)
                     } else {
-                        screenHeight - visibleRect.height() + convertDpToPx(35)
+                        contentView.measuredHeight - visibleRect.height() + convertDpToPx(40) + (viewWidth * 5 / 200)
                     })
 
         messageBackgroundView.measure(
@@ -242,6 +242,7 @@ class SendMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
 
         val viewWidth = right - left
         val viewHeight = bottom - top
+        val screenHeight = viewHeight - getStatusBarHeight()
 
         backgroundView.layoutToTopLeft(
             0,
@@ -260,9 +261,15 @@ class SendMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
             headerView.bottom - messageIconView.measuredHeight / 2
         )
 
-        contentView.layoutToTopLeft(
-            (viewWidth - contentView.measuredWidth) / 2,
+        val contentSideSpace = (viewWidth - contentView.measuredWidth) / 2
+        val contentViewTop = if (visibleRect.height() == screenHeight) {
             messageIconView.bottom + convertDpToPx(15)
+        } else {
+            getStatusBarHeight() + contentSideSpace
+        }
+        contentView.layoutToTopLeft(
+            contentSideSpace,
+            contentViewTop
         )
 
         titleTextView.layoutToTopLeft(
