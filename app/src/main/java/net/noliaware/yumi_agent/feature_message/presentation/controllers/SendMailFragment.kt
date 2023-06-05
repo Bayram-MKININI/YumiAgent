@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -160,6 +161,14 @@ class SendMailFragment : AppCompatDialogFragment() {
         text: String
     ) {
         if (recipients.isEmpty() || subject.isEmpty() || text.isEmpty()) {
+            when {
+                recipients.isEmpty() -> R.string.recipient_empty_error
+                subject.isEmpty() -> R.string.subject_empty_error
+                text.isEmpty() -> R.string.mail_empty_error
+                else -> null
+            }?.let { messageRes ->
+                Toast.makeText(context, getString(messageRes), Toast.LENGTH_SHORT).show()
+            }
             return
         }
         viewModel.callSendMessage(

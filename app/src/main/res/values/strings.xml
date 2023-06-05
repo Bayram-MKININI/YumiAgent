@@ -60,8 +60,10 @@
     <string name="sent">Envoyés</string>
     <string name="received">Reçus</string>
     <string name="recipient">Destinataire(s)</string>
+    <string name="recipient_empty_error">Veuillez saisir un compte valide</string>
     <string name="empty_hint">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</string>
     <string name="mail_subject">Objet</string>
+    <string name="subject_empty_error">L\'objet du message est vide</string>
     <string name="priority_information">Information</string>
     <string name="priority_warning">Avertissement</string>
     <string name="priority_important">Important</string>
@@ -73,6 +75,7 @@
     <string name="reply">Répondre</string>
     <string name="send">Envoyer</string>
     <string name="mail_body">Rédiger un message</string>
+    <string name="mail_empty_error">Le message est vide</string>
     <string name="delete">Suppression</string>
     <string name="delete_mail_confirmation">Voulez‑vous vraiment supprimer ce message ?</string>
 

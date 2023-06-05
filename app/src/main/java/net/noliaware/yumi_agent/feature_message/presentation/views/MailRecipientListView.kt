@@ -9,9 +9,13 @@ import android.widget.Space
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.children
 import androidx.core.widget.doAfterTextChanged
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.util.convertDpToPx
 import net.noliaware.yumi_agent.commun.util.inflate
+import net.noliaware.yumi_agent.commun.util.viewScope
 
 class MailRecipientListView @JvmOverloads constructor(
     context: Context,
@@ -22,6 +26,7 @@ class MailRecipientListView @JvmOverloads constructor(
     private lateinit var contentView: LinearLayoutCompat
     private lateinit var recipientEditText: EditText
     var mailDomain: String = ""
+    private var debounceJob: Job? = null
 
     init {
         initView()
@@ -33,7 +38,6 @@ class MailRecipientListView @JvmOverloads constructor(
             attachToRoot = true
         )
         contentView = findViewById(R.id.content_view)
-
         recipientEditText = contentView.findViewById(R.id.recipient_edit_text)
         recipientEditText.setOnEditorActionListener { textView, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_NEXT) {
@@ -49,17 +53,20 @@ class MailRecipientListView @JvmOverloads constructor(
         }
 
         recipientEditText.doAfterTextChanged {
-            val text = it.toString()
-
-            if (text.lastOrNull() == '@') {
-                recipientEditText.post {
-                    recipientEditText.append(mailDomain)
+            debounceJob?.cancel()
+            debounceJob = viewScope.launch {
+                val text = it.toString()
+                if (text.lastOrNull() == '@') {
+                    delay(300)
+                    recipientEditText.post {
+                        recipientEditText.append(mailDomain)
+                    }
                 }
-            }
-
-            if (listOf(' ', ',').any { symbol -> text.lastOrNull() == symbol }) {
-                val mail = text.dropLast(1)
-                validateMail(mail)
+                if (listOf(' ', ',').any { symbol -> text.lastOrNull() == symbol }) {
+                    delay(50)
+                    val mail = text.dropLast(1)
+                    validateMail(mail)
+                }
             }
         }
 
