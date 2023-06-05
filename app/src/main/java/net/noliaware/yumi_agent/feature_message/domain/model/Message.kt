@@ -13,6 +13,6 @@ data class Message(
     val messagePriority: Priority?,
     val messageSubject: String,
     val messagePreview: String?,
-    val messageReadStatus: Int?,
+    val isMessageRead: Boolean,
     val messageBody: String?
 ) : Serializable

@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import net.noliaware.yumi_agent.R
+import net.noliaware.yumi_agent.commun.DOMAIN_NAME
 import net.noliaware.yumi_agent.commun.MESSAGE
 import net.noliaware.yumi_agent.commun.domain.model.Priority
 import net.noliaware.yumi_agent.commun.presentation.mappers.PriorityMapper
@@ -30,8 +31,12 @@ class SendMailFragment : AppCompatDialogFragment() {
 
     companion object {
         fun newInstance(
-            message: Message? = null
-        ) = SendMailFragment().withArgs(MESSAGE to message)
+            message: Message? = null,
+            domainName: String? = null
+        ) = SendMailFragment().withArgs(
+            MESSAGE to message,
+            DOMAIN_NAME to domainName
+        )
     }
 
     private var sendMailView: SendMailView? = null
@@ -85,6 +90,10 @@ class SendMailFragment : AppCompatDialogFragment() {
             selectedMessage.messagePriority?.let { priority ->
                 sendMailView?.setSelectedPriorityAtIndex(priority.ordinal)
             }
+        }
+
+        viewModel.domainName?.let { domainName ->
+            sendMailView?.setMailDomain(domainName)
         }
     }
 

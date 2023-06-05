@@ -10,9 +10,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.ACCOUNT_DATA
 import net.noliaware.yumi_agent.commun.BO_SIGN_IN_FRAGMENT_TAG
+import net.noliaware.yumi_agent.commun.DAY_OF_MONTH_TEXT_DATE_FORMAT
+import net.noliaware.yumi_agent.commun.HOURS_TIME_FORMAT
 import net.noliaware.yumi_agent.commun.util.inflate
-import net.noliaware.yumi_agent.commun.util.parseTimestampToShortDate
-import net.noliaware.yumi_agent.commun.util.parseTimestampToTime
+import net.noliaware.yumi_agent.commun.util.parseTimestampToDate
 import net.noliaware.yumi_agent.commun.util.withArgs
 import net.noliaware.yumi_agent.feature_auth.presentation.views.AuthView
 import net.noliaware.yumi_agent.feature_auth.presentation.views.AuthView.AuthViewCallback
@@ -48,7 +49,11 @@ class AuthFragment : Fragment() {
                 accountData.helloMessage,
                 accountData.userName,
                 accountData.lastConnectionTimestamp.let {
-                    "${it.parseTimestampToShortDate()} ${it.parseTimestampToTime()}"
+                    getString(
+                        R.string.last_login_value,
+                        it.parseTimestampToDate(DAY_OF_MONTH_TEXT_DATE_FORMAT),
+                        it.parseTimestampToDate(HOURS_TIME_FORMAT)
+                    )
                 }
             )
         }

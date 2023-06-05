@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
-import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -13,7 +12,6 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.util.DisplayMetrics
-import android.util.Patterns
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -116,43 +114,43 @@ fun handlePaginatedListErrorIfAny(
     return errorType
 }
 
-fun parseToShortDate(dateStr: String?) = dateStr?.let {
-    val sourceFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE)
-    val date = sourceFormatter.parse(dateStr)
-    val destFormatter = SimpleDateFormat("dd LLL yyyy", Locale.FRANCE)
-    destFormatter.format(date)
-}.orEmpty()
+fun String.parseDateToFormat(
+    destFormat: String
+) = parseDateStringToFormat(this, DATE_SOURCE_FORMAT, destFormat).orEmpty()
 
-fun Long.parseTimestampToShortDate(): String = SimpleDateFormat(
-    "dd/MM/yyyy",
+fun String.parseTimeToFormat(
+    destFormat: String
+) = parseDateStringToFormat(this, TIME_SOURCE_FORMAT, destFormat).orEmpty()
+
+private fun parseDateStringToFormat(
+    sourceDate: String,
+    sourceFormat: String,
+    destFormat: String
+): String? {
+    val sourceFormatter = SimpleDateFormat(sourceFormat, Locale.FRANCE)
+    val date = sourceFormatter.parse(sourceDate)
+    val destFormatter = SimpleDateFormat(destFormat, Locale.FRANCE)
+    date?.let {
+        return destFormatter.format(it)
+    }
+    return null
+}
+
+fun Long.parseTimestampToDate(
+    destFormat: String
+): String = SimpleDateFormat(
+    destFormat,
     Locale.FRANCE
 ).format(this * 1000L)
-
-fun Long.parseTimestampToTime(): String = SimpleDateFormat(
-    "HH:mm",
-    Locale.FRANCE
-).format(this * 1000L)
-
-fun parseToLongDate(dateStr: String?) = dateStr?.let {
-    val sourceFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE)
-    val date = sourceFormatter.parse(dateStr)
-    val destFormatter = SimpleDateFormat("dd LLLL yyyy", Locale.FRANCE)
-    destFormatter.format(date)
-}.orEmpty()
-
-fun parseTimeString(dateStr: String?) = dateStr?.let {
-    val sourceFormatter = SimpleDateFormat("HH:mm:ss", Locale.FRANCE)
-    val date = sourceFormatter.parse(dateStr)
-    val destFormatter = SimpleDateFormat("HH:mm", Locale.FRANCE)
-    destFormatter.format(date)
-}.orEmpty()
 
 fun Int.parseSecondsToMinutesString(): String = SimpleDateFormat(
-    "mm:ss",
+    MINUTES_TIME_FORMAT,
     Locale.FRANCE
-).format(this * 1000)
+).format(this * 1000L)
 
-fun Fragment.handleSharedEvent(sharedEvent: UIEvent) = context?.let {
+fun Fragment.handleSharedEvent(
+    sharedEvent: UIEvent
+) = context?.let {
 
     when (sharedEvent) {
 
@@ -248,13 +246,6 @@ fun ViewGroup.inflate(
     layoutRes: Int,
     attachToRoot: Boolean = false
 ): View = LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
-
-fun Context.drawableIdByName(resIdName: String?): Int {
-    resIdName?.let {
-        return resources.getIdentifier(it, "drawable", packageName)
-    }
-    throw Resources.NotFoundException()
-}
 
 fun View.getStatusBarHeight() = convertDpToPx(24)
 
@@ -369,15 +360,6 @@ fun Context.getColorCompat(@ColorRes colorRes: Int): Int {
     return ContextCompat.getColor(this, colorRes)
 }
 
-@ColorInt
-fun String.parseHexColor(): Int {
-    return if (isEmpty()) {
-        Color.TRANSPARENT
-    } else {
-        Color.parseColor(this)
-    }
-}
-
 fun Context.getDrawableCompat(@DrawableRes drawableRes: Int) =
     AppCompatResources.getDrawable(this, drawableRes)
 
@@ -431,5 +413,3 @@ fun Context.startWebBrowserAtURL(url: String) {
         startActivity(this)
     }
 }
-
-fun String.isValidEmail() = isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()

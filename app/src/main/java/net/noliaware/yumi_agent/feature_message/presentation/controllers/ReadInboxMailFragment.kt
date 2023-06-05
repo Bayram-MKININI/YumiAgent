@@ -13,6 +13,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import net.noliaware.yumi_agent.R
+import net.noliaware.yumi_agent.commun.HOURS_TIME_FORMAT
+import net.noliaware.yumi_agent.commun.LONG_DATE_WITH_DAY_FORMAT
 import net.noliaware.yumi_agent.commun.MESSAGE_ID
 import net.noliaware.yumi_agent.commun.MESSAGE_PRIORITY
 import net.noliaware.yumi_agent.commun.MESSAGE_SUBJECT
@@ -20,8 +22,8 @@ import net.noliaware.yumi_agent.commun.SEND_MESSAGES_FRAGMENT_TAG
 import net.noliaware.yumi_agent.commun.presentation.mappers.PriorityMapper
 import net.noliaware.yumi_agent.commun.util.ViewModelState
 import net.noliaware.yumi_agent.commun.util.handleSharedEvent
-import net.noliaware.yumi_agent.commun.util.parseTimeString
-import net.noliaware.yumi_agent.commun.util.parseToLongDate
+import net.noliaware.yumi_agent.commun.util.parseDateToFormat
+import net.noliaware.yumi_agent.commun.util.parseTimeToFormat
 import net.noliaware.yumi_agent.commun.util.redirectToLoginScreenFromSharedEvent
 import net.noliaware.yumi_agent.commun.util.withArgs
 import net.noliaware.yumi_agent.feature_message.domain.model.Message
@@ -112,8 +114,8 @@ class ReadInboxMailFragment : AppCompatDialogFragment() {
             mail = "${getString(R.string.mail_from)} ${message.messageSender}",
             time = getString(
                 R.string.received_at,
-                parseToLongDate(message.messageDate),
-                parseTimeString(message.messageTime)
+                message.messageDate.parseDateToFormat(LONG_DATE_WITH_DAY_FORMAT),
+                message.messageTime.parseTimeToFormat(HOURS_TIME_FORMAT)
             ),
             message = message.messageBody.orEmpty(),
             replyPossible = true

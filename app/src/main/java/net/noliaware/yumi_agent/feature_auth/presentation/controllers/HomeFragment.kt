@@ -74,7 +74,7 @@ class HomeFragment : Fragment() {
                 childFragmentManager.beginTransaction().run {
                     replace(
                         R.id.main_fragment_container,
-                        MessagingFragment.newInstance()
+                        MessagingFragment.newInstance(viewModel.accountData?.domainName)
                     )
                     commitAllowingStateLoss()
                 }

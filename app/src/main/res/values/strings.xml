@@ -24,6 +24,7 @@
 
     //Authentification
     <string name="last_login">Dernière connexion:</string>
+    <string name="last_login_value">%s à %s</string>
     <string name="bo_access">Accès application web</string>
     <string name="bo_access_description">Génerer un code d\'accès à votre compte sur l\'application web</string>
     <string name="access">Générer un code</string>
@@ -66,7 +67,6 @@
     <string name="priority_important">Important</string>
     <string name="priority_critical">Critique</string>
     <string name="sent_at">Envoyé le %s à %s</string>
-    <string name="date_short">%s\n%s</string>
     <string name="mail_from">De:</string>
     <string name="mail_to">À:</string>
     <string name="new_mail">Nouveau message</string>

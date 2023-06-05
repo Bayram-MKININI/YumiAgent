@@ -17,13 +17,16 @@ data class AccountDataDTO(
     @Json(name = "newAlertCount")
     val newAlertCount: Int = 0,
     @Json(name = "newMessageCount")
-    val newMessageCount: Int = 0
+    val newMessageCount: Int = 0,
+    @Json(name = "domainName")
+    val domainName: String?
 ) {
     fun toAccountData() = AccountData(
         helloMessage = helloMessage,
         userName = userName,
         lastConnectionTimestamp = lastConnectionTimestamp,
         newAlertCount = newAlertCount,
-        newMessageCount = newMessageCount
+        newMessageCount = newMessageCount,
+        domainName = domainName
     )
 }

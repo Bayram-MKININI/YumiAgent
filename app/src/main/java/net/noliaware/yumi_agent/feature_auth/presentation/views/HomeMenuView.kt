@@ -137,7 +137,7 @@ class HomeMenuView(context: Context, attrs: AttributeSet?) : MaterialCardView(co
 
         setMeasuredDimension(
             MeasureSpec.makeMeasureSpec(viewWidth, MeasureSpec.EXACTLY),
-            MeasureSpec.makeMeasureSpec(convertDpToPx(64), View.MeasureSpec.EXACTLY)
+            MeasureSpec.makeMeasureSpec(convertDpToPx(64), MeasureSpec.EXACTLY)
         )
     }
 

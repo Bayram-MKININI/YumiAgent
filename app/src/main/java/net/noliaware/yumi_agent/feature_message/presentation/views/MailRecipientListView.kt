@@ -21,6 +21,7 @@ class MailRecipientListView @JvmOverloads constructor(
 
     private lateinit var contentView: LinearLayoutCompat
     private lateinit var recipientEditText: EditText
+    var mailDomain: String = ""
 
     init {
         initView()
@@ -49,7 +50,14 @@ class MailRecipientListView @JvmOverloads constructor(
 
         recipientEditText.doAfterTextChanged {
             val text = it.toString()
-            if (text.lastOrNull().toString() == " ") {
+
+            if (text.lastOrNull() == '@') {
+                recipientEditText.post {
+                    recipientEditText.append(mailDomain)
+                }
+            }
+
+            if (listOf(' ', ',').any { symbol -> text.lastOrNull() == symbol }) {
                 val mail = text.dropLast(1)
                 validateMail(mail)
             }
@@ -60,7 +68,7 @@ class MailRecipientListView @JvmOverloads constructor(
     }
 
     private fun validateMail(mail: String) {
-        if (mail.isNotEmpty() && recipientEditText.isEnabled) {
+        if (mail.isNotEmpty() && recipientEditText.isEnabled && mail.contains('@')) {
             addEmailText(mail)
         }
     }

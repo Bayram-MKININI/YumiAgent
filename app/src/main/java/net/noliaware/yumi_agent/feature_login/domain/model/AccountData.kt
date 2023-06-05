@@ -7,5 +7,6 @@ data class AccountData(
     val userName: String = "",
     val lastConnectionTimestamp: Long = 0,
     val newAlertCount: Int = 0,
-    val newMessageCount: Int = 0
+    val newMessageCount: Int = 0,
+    val domainName: String?
 ) : Serializable

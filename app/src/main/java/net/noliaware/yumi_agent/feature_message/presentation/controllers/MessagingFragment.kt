@@ -6,12 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import net.noliaware.yumi_agent.R
+import net.noliaware.yumi_agent.commun.DOMAIN_NAME
 import net.noliaware.yumi_agent.commun.SEND_MESSAGES_FRAGMENT_TAG
 import net.noliaware.yumi_agent.commun.util.inflate
+import net.noliaware.yumi_agent.commun.util.withArgs
 import net.noliaware.yumi_agent.feature_message.presentation.views.MessagingView
 import net.noliaware.yumi_agent.feature_message.presentation.views.MessagingView.MailViewCallback
 
@@ -19,10 +22,13 @@ import net.noliaware.yumi_agent.feature_message.presentation.views.MessagingView
 class MessagingFragment : Fragment() {
 
     companion object {
-        fun newInstance() = MessagingFragment()
+        fun newInstance(
+            domainName: String?
+        ) = MessagingFragment().withArgs(DOMAIN_NAME to domainName)
     }
 
     private var messagingView: MessagingView? = null
+    private val viewModel by viewModels<MessagingFragmentViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -44,7 +50,9 @@ class MessagingFragment : Fragment() {
 
     private val messagingViewCallback: MailViewCallback by lazy {
         MailViewCallback {
-            SendMailFragment.newInstance().apply {
+            SendMailFragment.newInstance(
+                domainName = viewModel.domainName
+            ).apply {
                 onMessageSent = {
                     (messagingView?.getViewPager?.adapter as MessageFragmentStateAdapter).refreshSentFragment()
                 }

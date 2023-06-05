@@ -46,7 +46,6 @@ class SendMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
     private lateinit var mailEditText: EditText
     private lateinit var sendButton: View
     private val visibleRect = Rect()
-
     var callback: SendMailViewCallback? by weak()
 
     interface SendMailViewCallback {
@@ -106,6 +105,10 @@ class SendMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
                 )
             }
         }
+    }
+
+    fun setMailDomain(mailDomain: String) {
+        mailRecipientListView.mailDomain = mailDomain
     }
 
     fun setSelectedPriorityAtIndex(index: Int) {
