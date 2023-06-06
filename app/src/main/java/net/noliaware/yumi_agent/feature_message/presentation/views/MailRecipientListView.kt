@@ -131,7 +131,11 @@ class MailRecipientListView @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val viewWidth = MeasureSpec.getSize(widthMeasureSpec)
         contentView.minimumWidth = viewWidth
-        recipientEditText.minimumWidth = viewWidth - convertDpToPx(30)
+        recipientEditText.minimumWidth = if (contentView.childCount == 1) {
+            viewWidth - convertDpToPx(30)
+        } else {
+            viewWidth * 2 / 10
+        }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
 }

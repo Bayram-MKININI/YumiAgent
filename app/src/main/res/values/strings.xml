@@ -61,7 +61,7 @@
     <string name="received">Reçus</string>
     <string name="recipient">Destinataire(s)</string>
     <string name="recipient_empty_error">Veuillez saisir un compte valide</string>
-    <string name="empty_hint">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</string>
+    <string name="empty_hint">&#160;</string>
     <string name="mail_subject">Objet</string>
     <string name="subject_empty_error">L\'objet du message est vide</string>
     <string name="priority_information">Information</string>
