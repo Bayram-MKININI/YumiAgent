@@ -127,4 +127,11 @@ class MailRecipientListView @JvmOverloads constructor(
     fun getRecipients() = contentView.children.toList().mapNotNull { child ->
         child.getTag(R.string.view_tag_key)?.toString()
     }.distinct()
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val viewWidth = MeasureSpec.getSize(widthMeasureSpec)
+        contentView.minimumWidth = viewWidth
+        recipientEditText.minimumWidth = viewWidth - convertDpToPx(30)
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    }
 }
