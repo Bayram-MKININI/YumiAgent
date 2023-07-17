@@ -2,7 +2,6 @@
 
     <string name="error_no_network">Erreur réseau. Vérifier vos paramètres de connexion.</string>
     <string name="error_contact_support">Une erreur est survenue, veuillez contacter le support technique.</string>
-    <string name="error_message">%s Essais restants: %d</string>
     <string name="back">Retour</string>
     <string name="update_app">Mise à jour disponible</string>
     <string name="update_message">Une nouvelle version de l\'application est disponible. Veuillez la télécharger maintenant pour continuer</string>
@@ -13,13 +12,10 @@
     <string name="enter_login_message">Saisissez votre identifiant</string>
     <string name="enter_code_message">Saisissez votre code</string>
     <string name="enter_code_description">6 chiffres</string>
-    <string name="enter_code_comment_message">Bienvenue %s!</string>
     <string name="login_empty_error">Le champ identifiant est vide</string>
     <string name="hint_login">Identifiant</string>
-    <string name="secret_code">Votre code secret</string>
     <string name="confirm">Valider</string>
     <string name="erase">Effacer</string>
-    <string name="correct">Corriger</string>
     <string name="cancel">Annuler</string>
 
     //Authentification
@@ -28,9 +24,7 @@
     <string name="bo_access">Accès application web</string>
     <string name="bo_access_description">Génerer un code d\'accès à votre compte sur l\'application web</string>
     <string name="access">Générer un code</string>
-    <string name="new_line">\n</string>
     <string name="empty_value">-</string>
-    <string name="get_code">Obtenir un code</string>
     <string name="bo_sign_in_description">Veuillez utiliser ce code pour vous connecter à votre compte sur l\'application web</string>
     <string name="bo_code_expiration">Ce code expire dans:</string>
     <string name="empty_time">--:--</string>
@@ -43,8 +37,6 @@
     <string name="name">Prénom</string>
     <string name="service">Service</string>
     <string name="phone">Téléphone</string>
-    <string name="address">Adresse</string>
-    <string name="email">Mail</string>
     <string name="my_accounts">Mes comptes gérés</string>
     <string name="users">Bénéficiaires</string>
     <string name="retailers">Fournisseurs</string>
@@ -73,7 +65,6 @@
     <string name="mail_to">À:</string>
     <string name="new_mail">Nouveau message</string>
     <string name="reply">Répondre</string>
-    <string name="send">Envoyer</string>
     <string name="mail_body">Rédiger un message</string>
     <string name="mail_empty_error">Le message est vide</string>
     <string name="delete">Suppression</string>

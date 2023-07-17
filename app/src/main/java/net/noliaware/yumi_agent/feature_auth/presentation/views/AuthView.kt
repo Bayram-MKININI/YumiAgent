@@ -14,6 +14,7 @@ import net.noliaware.yumi_agent.commun.util.layoutToBottomLeft
 import net.noliaware.yumi_agent.commun.util.layoutToTopLeft
 import net.noliaware.yumi_agent.commun.util.measureWrapContent
 import net.noliaware.yumi_agent.commun.util.weak
+import kotlin.math.roundToInt
 
 class AuthView(context: Context, attrs: AttributeSet?) : ViewGroup(context, attrs) {
 
@@ -22,6 +23,7 @@ class AuthView(context: Context, attrs: AttributeSet?) : ViewGroup(context, attr
     private lateinit var nameTextView: TextView
     private lateinit var lastLoginTitleTextView: TextView
     private lateinit var lastLoginValueTextView: TextView
+    private lateinit var boAccessImageView: View
     private lateinit var boAccessTextView: TextView
     private lateinit var boAccessDescriptionTextView: TextView
     private lateinit var accessButtonLayout: LinearLayoutCompat
@@ -42,6 +44,7 @@ class AuthView(context: Context, attrs: AttributeSet?) : ViewGroup(context, attr
         nameTextView = findViewById(R.id.name_text_view)
         lastLoginTitleTextView = findViewById(R.id.last_login_title_text_view)
         lastLoginValueTextView = findViewById(R.id.last_login_value_text_view)
+        boAccessImageView = findViewById(R.id.bo_access_image_view)
         boAccessTextView = findViewById(R.id.bo_access_text_view)
         boAccessDescriptionTextView = findViewById(R.id.bo_access_description_text_view)
         accessButtonLayout = findViewById(R.id.access_button_layout)
@@ -78,6 +81,7 @@ class AuthView(context: Context, attrs: AttributeSet?) : ViewGroup(context, attr
         )
 
         lastLoginTitleTextView.measureWrapContent()
+
         lastLoginValueTextView.measureWrapContent()
 
         boAccessTextView.measureWrapContent()
@@ -86,7 +90,16 @@ class AuthView(context: Context, attrs: AttributeSet?) : ViewGroup(context, attr
             MeasureSpec.makeMeasureSpec(viewWidth * 9 / 10, MeasureSpec.AT_MOST),
             MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         )
+
         accessButtonLayout.measureWrapContent()
+
+        boAccessImageView.measure(
+            MeasureSpec.makeMeasureSpec(
+                (boAccessTextView.measuredWidth / GOLDEN_RATIO).roundToInt(),
+                MeasureSpec.EXACTLY
+            ),
+            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+        )
 
         setMeasuredDimension(
             MeasureSpec.makeMeasureSpec(viewWidth, MeasureSpec.EXACTLY),
@@ -120,12 +133,17 @@ class AuthView(context: Context, attrs: AttributeSet?) : ViewGroup(context, attr
             lastLoginTitleTextView.bottom
         )
 
-        val contentHeight = boAccessTextView.measuredHeight + boAccessDescriptionTextView.measuredHeight +
-                    accessButtonLayout.measuredHeight
+        val contentHeight = boAccessImageView.measuredHeight + boAccessTextView.measuredHeight + boAccessDescriptionTextView.measuredHeight +
+                accessButtonLayout.measuredHeight + getStatusBarHeight() + convertDpToPx(40)
+
+        boAccessImageView.layoutToTopLeft(
+            (viewWidth - boAccessImageView.measuredWidth) / 2,
+            (viewHeight / GOLDEN_RATIO - contentHeight / 2).roundToInt()
+        )
 
         boAccessTextView.layoutToTopLeft(
             (viewWidth - boAccessTextView.measuredWidth) / 2,
-            (viewHeight / GOLDEN_RATIO - contentHeight / 2).toInt()
+            boAccessImageView.bottom + convertDpToPx(15)
         )
 
         boAccessDescriptionTextView.layoutToTopLeft(
