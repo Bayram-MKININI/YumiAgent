@@ -27,7 +27,7 @@ class SendMailFragmentViewModel @Inject constructor(
     fun callSendMessage(
         recipients: List<String>? = null,
         subject: String? = null,
-        messagePriority: Int,
+        messagePriority: Int? = null,
         messageId: String? = null,
         messageBody: String
     ) {

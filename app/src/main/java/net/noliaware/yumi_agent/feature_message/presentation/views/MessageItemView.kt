@@ -73,15 +73,16 @@ class MessageItemView(context: Context, attrs: AttributeSet?) : ViewGroup(contex
         iconImageView.measureWrapContent()
         timeTextView.measureWrapContent()
 
-        val bodyTextMaxWidth = viewWidth - (timeTextView.measuredWidth + iconImageView.measuredWidth +
-                    convertDpToPx(32))
+        val subjectTextMaxWidth = viewWidth - (timeTextView.measuredWidth + iconImageView.measuredWidth +
+                convertDpToPx(32))
         subjectTextView.measure(
-            MeasureSpec.makeMeasureSpec(bodyTextMaxWidth, MeasureSpec.AT_MOST),
+            MeasureSpec.makeMeasureSpec(subjectTextMaxWidth, MeasureSpec.AT_MOST),
             MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         )
 
-        mailTextView.measure(
-            MeasureSpec.makeMeasureSpec(viewWidth * 9 / 10, MeasureSpec.AT_MOST),
+        val bodyTextMaxWidth = viewWidth - (iconImageView.measuredWidth + convertDpToPx(22))
+        bodyTextView.measure(
+            MeasureSpec.makeMeasureSpec(bodyTextMaxWidth, MeasureSpec.AT_MOST),
             MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         )
 

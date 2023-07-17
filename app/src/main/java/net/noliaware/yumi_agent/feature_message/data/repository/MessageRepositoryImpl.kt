@@ -149,7 +149,7 @@ class MessageRepositoryImpl(
     override fun sendMessage(
         recipients: List<String>?,
         subject: String?,
-        messagePriority: Int,
+        messagePriority: Int?,
         messageId: String?,
         messageBody: String
     ): Flow<Resource<Boolean>> = flow {
@@ -206,16 +206,16 @@ class MessageRepositoryImpl(
     private fun generateSendMessageParams(
         recipients: List<String>? = null,
         subject: String? = null,
-        messagePriority: Int,
+        messagePriority: Int?,
         messageId: String? = null,
         messageBody: String,
         tokenKey: String
     ) = mutableMapOf(
-        MESSAGE_PRIORITY to messagePriority.toString(),
         MESSAGE_BODY to messageBody
     ).also { map ->
         recipients?.let { map[MESSAGE_TO] = recipients.joinToString(";") }
         subject?.let { map[MESSAGE_SUBJECT] = subject }
+        messagePriority?.let { map[MESSAGE_PRIORITY] = messagePriority.toString() }
         messageId?.let { map[MESSAGE_ID] = messageId }
         map.plusAssign(getCommonWSParams(sessionData, tokenKey))
     }.toMap()

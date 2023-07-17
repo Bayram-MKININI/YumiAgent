@@ -1,6 +1,8 @@
 package net.noliaware.yumi_agent.feature_message.presentation.views
 
 import android.content.Context
+import android.text.Spanned
+import android.text.SpannedString
 import android.util.AttributeSet
 import android.view.View
 import android.view.View.OnClickListener
@@ -43,7 +45,7 @@ class ReadMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
         val subject: String = "",
         val mail: String = "",
         val time: String = "",
-        val message: String = "",
+        val message: Spanned = SpannedString(""),
         val replyPossible: Boolean = false
     )
 
@@ -156,8 +158,7 @@ class ReadMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
 
         if (composeButton.isVisible) {
             composeButton.measureWrapContent()
-            val availableSpaceForMessage =
-                messageParentView.measuredHeight - (composeButton.measuredHeight +
+            val availableSpaceForMessage = messageParentView.measuredHeight - (composeButton.measuredHeight +
                         convertDpToPx(30))
             val extraPadding = messageTextView.measuredHeight - availableSpaceForMessage
             if (extraPadding > 0) {

@@ -18,7 +18,7 @@ interface MessageRepository {
     fun sendMessage(
         recipients: List<String>?,
         subject: String?,
-        messagePriority: Int,
+        messagePriority: Int?,
         messageId: String?,
         messageBody: String
     ): Flow<Resource<Boolean>>

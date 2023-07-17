@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.core.view.ViewCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -39,8 +40,11 @@ class SendMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
     private lateinit var messageBackgroundView: View
     private lateinit var subjectEditText: EditText
     private lateinit var clearSubjectImageView: ImageView
+
     lateinit var prioritySpinner: Spinner
         private set
+    private lateinit var fixedPriorityImageView: ImageView
+
     private lateinit var separatorLineView: View
     private lateinit var messageParentLayout: View
     private lateinit var mailEditText: EditText
@@ -78,6 +82,7 @@ class SendMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
         clearSubjectImageView.setOnClickListener { subjectEditText.text.clear() }
 
         prioritySpinner = contentView.findViewById(R.id.priority_spinner)
+        fixedPriorityImageView = contentView.findViewById(R.id.fixed_priority_image_view)
 
         separatorLineView = contentView.findViewById(R.id.separator_line_view)
         messageParentLayout = contentView.findViewById(R.id.message_parent_layout)
@@ -111,12 +116,6 @@ class SendMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
         mailRecipientListView.mailDomain = mailDomain
     }
 
-    fun setSelectedPriorityAtIndex(index: Int) {
-        prioritySpinner.setSelection(index)
-    }
-
-    fun getSelectedPriorityIndex() = prioritySpinner.selectedItemPosition
-
     fun setRecipientFixed(recipient: String) {
         mailRecipientListView.setRecipientFixed(recipient)
     }
@@ -125,6 +124,14 @@ class SendMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
         subjectEditText.setText(subject)
         subjectEditText.isEnabled = false
         clearSubjectImageView.isGone = true
+    }
+
+    fun getSelectedPriorityIndex() = prioritySpinner.selectedItemPosition
+
+    fun setPriorityFixed(@DrawableRes subjectIcon: Int) {
+        prioritySpinner.isGone = true
+        fixedPriorityImageView.isVisible = true
+        fixedPriorityImageView.setImageResource(subjectIcon)
     }
 
     fun computeMailView() {
@@ -198,19 +205,32 @@ class SendMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
 
         clearSubjectImageView.measureWrapContent()
 
-        prioritySpinner.measure(
-            MeasureSpec.makeMeasureSpec(convertDpToPx(50), MeasureSpec.EXACTLY),
-            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
-        )
+        if (prioritySpinner.isVisible) {
+            prioritySpinner.measure(
+                MeasureSpec.makeMeasureSpec(convertDpToPx(50), MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+            )
+        }
+
+        if (fixedPriorityImageView.isVisible) {
+            fixedPriorityImageView.measure(
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+            )
+        }
 
         val separatorWidth = messageBackgroundView.measuredWidth - convertDpToPx(30)
 
-        val objectEditTextWidth = separatorWidth - (prioritySpinner.measuredWidth + convertDpToPx(5)) -
-                    if (clearSubjectImageView.isVisible) {
-                        clearSubjectImageView.measuredWidth + convertDpToPx(5)
-                    } else {
-                        0
-                    }
+        val objectEditTextWidth = separatorWidth - (
+                max(
+                    prioritySpinner.measuredWidth,
+                    fixedPriorityImageView.measuredWidth
+                ) + convertDpToPx(5)
+                ) - if (clearSubjectImageView.isVisible) {
+            clearSubjectImageView.measuredWidth + convertDpToPx(5)
+        } else {
+            0
+        }
 
         subjectEditText.measure(
             MeasureSpec.makeMeasureSpec(objectEditTextWidth, MeasureSpec.EXACTLY),
@@ -223,10 +243,11 @@ class SendMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
         )
 
         val availableHeightForBody = messageBackgroundView.measuredHeight - (
-                max(
+                listOf(
                     subjectEditText.measuredHeight + convertDpToPx(10),
-                    prioritySpinner.measuredHeight + convertDpToPx(4)
-                ) + separatorLineView.measuredHeight + convertDpToPx(20))
+                    prioritySpinner.measuredHeight + convertDpToPx(4),
+                    fixedPriorityImageView.measuredHeight + convertDpToPx(16)
+                ).max() + separatorLineView.measuredHeight + convertDpToPx(20))
 
         mailEditText.minHeight = availableHeightForBody
 
@@ -290,10 +311,11 @@ class SendMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
             mailRecipientListView.bottom + convertDpToPx(10)
         )
 
-        val spaceForMessageObject = max(
+        val spaceForMessageObject = listOf(
             subjectEditText.measuredHeight + convertDpToPx(10),
-            prioritySpinner.measuredHeight + convertDpToPx(2)
-        )
+            prioritySpinner.measuredHeight + convertDpToPx(4),
+            fixedPriorityImageView.measuredHeight + convertDpToPx(16)
+        ).max()
 
         subjectEditText.layoutToTopLeft(
             messageBackgroundView.left + convertDpToPx(15),
@@ -305,10 +327,18 @@ class SendMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
             messageBackgroundView.top + (spaceForMessageObject - clearSubjectImageView.measuredHeight) / 2
         )
 
-        prioritySpinner.layoutToTopRight(
-            messageBackgroundView.right - convertDpToPx(15),
-            messageBackgroundView.top + (spaceForMessageObject - prioritySpinner.measuredHeight) / 2
-        )
+        if (prioritySpinner.isVisible) {
+            prioritySpinner.layoutToTopRight(
+                messageBackgroundView.right - convertDpToPx(15),
+                messageBackgroundView.top + (spaceForMessageObject - prioritySpinner.measuredHeight) / 2
+            )
+        }
+        if (fixedPriorityImageView.isVisible) {
+            fixedPriorityImageView.layoutToTopRight(
+                messageBackgroundView.right - convertDpToPx(15),
+                messageBackgroundView.top + (spaceForMessageObject - fixedPriorityImageView.measuredHeight) / 2
+            )
+        }
 
         separatorLineView.layoutToTopLeft(
             (contentView.measuredWidth - separatorLineView.measuredWidth) / 2,

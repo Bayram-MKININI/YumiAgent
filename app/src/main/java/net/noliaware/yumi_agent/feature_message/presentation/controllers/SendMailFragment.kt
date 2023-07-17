@@ -88,9 +88,7 @@ class SendMailFragment : AppCompatDialogFragment() {
                 sendMailView?.setRecipientFixed(messageSender)
             }
             sendMailView?.setSubjectFixed(selectedMessage.messageSubject)
-            selectedMessage.messagePriority?.let { priority ->
-                sendMailView?.setSelectedPriorityAtIndex(priority.ordinal)
-            }
+            sendMailView?.setPriorityFixed(PriorityMapper().mapPriorityIcon(selectedMessage.messagePriority))
         }
 
         viewModel.domainName?.let { domainName ->
@@ -138,7 +136,7 @@ class SendMailFragment : AppCompatDialogFragment() {
                 val priority = Priority.values()[selectedPriorityIndex].value
 
                 if (viewModel.message != null) {
-                    sendMailReply(priority, text)
+                    sendMailReply(text)
                 } else {
                     sendNewMail(recipients, subject, priority, text)
                 }
@@ -146,9 +144,8 @@ class SendMailFragment : AppCompatDialogFragment() {
         }
     }
 
-    private fun sendMailReply(priority: Int, text: String) {
+    private fun sendMailReply(text: String) {
         viewModel.callSendMessage(
-            messagePriority = priority,
             messageId = viewModel.message?.messageId,
             messageBody = text
         )
