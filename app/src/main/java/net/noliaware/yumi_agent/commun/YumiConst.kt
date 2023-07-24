@@ -5,6 +5,7 @@ import net.noliaware.yumi_agent.BuildConfig
 const val BASE_URL = "https://api.noliaware.net/yumi/agent/"
 const val INIT = "init"
 const val CONNECT = "connect"
+const val SET_PRIVACY_POLICY_READ_STATUS = "setPrivacyPolicyReadStatus"
 const val GET_ACCOUNT = "getAccount"
 const val GET_BACK_OFFICE_SIGN_IN_CODE = "getBackOfficeSignInCode"
 const val GET_ALERT_LIST = "getAlertList"
@@ -46,6 +47,8 @@ const val ALERTS = "alerts"
 const val TIMESTAMP_OFFSET = "timestampOffset"
 
 const val ACCOUNT_DATA = "account_data"
+const val PRIVACY_POLICY_URL = "privacy_policy_url"
+const val PRIVACY_POLICY_CONFIRMATION_REQUIRED = "privacy_policy_confirmation_required"
 const val DOMAIN_NAME = "domain_name"
 
 const val MESSAGE_INBOX_DAT = "message_inbox_dat"
@@ -74,6 +77,7 @@ const val KEY_FORCE_UPDATE_REQUIRED = "android_force_update_required"
 const val KEY_FORCE_UPDATE_URL = "android_force_update_store_url"
 
 //FRAGMENT TAGS
+const val PRIVACY_POLICY_FRAGMENT_TAG = "privacy_policy_fragment"
 const val BO_SIGN_IN_FRAGMENT_TAG = "bo_sign_in_fragment"
 const val READ_MESSAGE_FRAGMENT_TAG = "read_message_fragment"
 const val SEND_MESSAGES_FRAGMENT_TAG = "send_messages_fragment"

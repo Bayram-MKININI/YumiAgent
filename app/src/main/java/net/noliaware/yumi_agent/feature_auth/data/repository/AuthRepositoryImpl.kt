@@ -3,6 +3,7 @@ package net.noliaware.yumi_agent.feature_auth.data.repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import net.noliaware.yumi_agent.commun.GET_BACK_OFFICE_SIGN_IN_CODE
+import net.noliaware.yumi_agent.commun.SET_PRIVACY_POLICY_READ_STATUS
 import net.noliaware.yumi_agent.commun.data.remote.RemoteApi
 import net.noliaware.yumi_agent.commun.domain.model.SessionData
 import net.noliaware.yumi_agent.commun.util.ErrorType
@@ -19,6 +20,50 @@ class AuthRepositoryImpl(
     private val api: RemoteApi,
     private val sessionData: SessionData
 ) : AuthRepository {
+
+    override fun updatePrivacyPolicyReadStatus(): Flow<Resource<Boolean>> = flow {
+
+        emit(Resource.Loading())
+
+        try {
+
+            val timestamp = System.currentTimeMillis().toString()
+            val randomString = UUID.randomUUID().toString()
+
+            val remoteData = api.updatePrivacyPolicyReadStatus(
+                timestamp = timestamp,
+                saltString = randomString,
+                token = generateToken(
+                    timestamp = timestamp,
+                    methodName = SET_PRIVACY_POLICY_READ_STATUS,
+                    randomString = randomString
+                ),
+                params = getCommonWSParams(sessionData, SET_PRIVACY_POLICY_READ_STATUS)
+            )
+
+            val sessionNoFailure = handleSessionWithNoFailure(
+                session = remoteData.session,
+                sessionData = sessionData,
+                tokenKey = SET_PRIVACY_POLICY_READ_STATUS,
+                appMessage = remoteData.message,
+                error = remoteData.error
+            )
+
+            if (sessionNoFailure) {
+                emit(
+                    Resource.Success(
+                        data = remoteData.data?.result == 1,
+                        appMessage = remoteData.message?.toAppMessage()
+                    )
+                )
+            }
+
+        } catch (ex: HttpException) {
+            emit(Resource.Error(errorType = ErrorType.SYSTEM_ERROR))
+        } catch (ex: IOException) {
+            emit(Resource.Error(errorType = ErrorType.NETWORK_ERROR))
+        }
+    }
 
     override fun getBackOfficeSignInCode(): Flow<Resource<BOSignIn>> = flow {
 

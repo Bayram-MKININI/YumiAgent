@@ -213,10 +213,7 @@ class SendMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
         }
 
         if (fixedPriorityImageView.isVisible) {
-            fixedPriorityImageView.measure(
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
-            )
+            fixedPriorityImageView.measureWrapContent()
         }
 
         val separatorWidth = messageBackgroundView.measuredWidth - convertDpToPx(30)

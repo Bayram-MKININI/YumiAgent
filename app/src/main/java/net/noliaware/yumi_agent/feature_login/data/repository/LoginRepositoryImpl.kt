@@ -25,6 +25,7 @@ import net.noliaware.yumi_agent.commun.LOGIN
 import net.noliaware.yumi_agent.commun.PASSWORD
 import net.noliaware.yumi_agent.commun.PUSH_TOKEN
 import net.noliaware.yumi_agent.commun.SEND_MESSAGE
+import net.noliaware.yumi_agent.commun.SET_PRIVACY_POLICY_READ_STATUS
 import net.noliaware.yumi_agent.commun.data.remote.RemoteApi
 import net.noliaware.yumi_agent.commun.data.remote.dto.SessionDTO
 import net.noliaware.yumi_agent.commun.domain.model.SessionData
@@ -174,6 +175,7 @@ class LoginRepositoryImpl @Inject constructor(
     ).also { it.plusAssign(getCommonWSParams(sessionData, tokenKey)) }
 
     private fun SessionData.fillMapWithInitialToken(sessionDTO: SessionDTO) {
+        this.sessionTokens[SET_PRIVACY_POLICY_READ_STATUS] = sessionDTO.sessionToken
         this.sessionTokens[GET_ACCOUNT] = sessionDTO.sessionToken
         this.sessionTokens[GET_BACK_OFFICE_SIGN_IN_CODE] = sessionDTO.sessionToken
         this.sessionTokens[GET_ALERT_LIST] = sessionDTO.sessionToken

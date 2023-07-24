@@ -10,6 +10,7 @@ import net.noliaware.yumi_agent.commun.util.convertDpToPx
 import net.noliaware.yumi_agent.commun.util.layoutToTopLeft
 import net.noliaware.yumi_agent.commun.util.layoutToTopRight
 import net.noliaware.yumi_agent.commun.util.measureWrapContent
+import net.noliaware.yumi_agent.commun.util.weak
 
 class ProfileView(context: Context, attrs: AttributeSet?) : ViewGroup(context, attrs) {
 
@@ -37,6 +38,8 @@ class ProfileView(context: Context, attrs: AttributeSet?) : ViewGroup(context, a
     private lateinit var partnersValueTextView: TextView
     private lateinit var contributorsTitleTextView: TextView
     private lateinit var contributorsValueTextView: TextView
+    private lateinit var privacyPolicyLinkTextView: TextView
+    var callback: ProfileViewCallback? by weak()
 
     data class ProfileViewAdapter(
         val login: String = "",
@@ -50,6 +53,10 @@ class ProfileView(context: Context, attrs: AttributeSet?) : ViewGroup(context, a
         val partnersValue: String = "",
         val contributorsValue: String = ""
     )
+
+    fun interface ProfileViewCallback {
+        fun onPrivacyPolicyButtonClicked()
+    }
 
     override fun onFinishInflate() {
         super.onFinishInflate()
@@ -81,6 +88,11 @@ class ProfileView(context: Context, attrs: AttributeSet?) : ViewGroup(context, a
         partnersValueTextView = findViewById(R.id.partners_value_text_view)
         contributorsTitleTextView = findViewById(R.id.contributors_title_text_view)
         contributorsValueTextView = findViewById(R.id.contributors_value_text_view)
+
+        privacyPolicyLinkTextView = findViewById(R.id.privacy_policy_link_text_view)
+        privacyPolicyLinkTextView.setOnClickListener {
+            callback?.onPrivacyPolicyButtonClicked()
+        }
     }
 
     fun fillViewWithData(profileViewAdapter: ProfileViewAdapter) {
@@ -140,12 +152,16 @@ class ProfileView(context: Context, attrs: AttributeSet?) : ViewGroup(context, a
         contributorsTitleTextView.measureWrapContent()
         contributorsValueTextView.measureWrapContent()
 
+        privacyPolicyLinkTextView.measureWrapContent()
 
-        viewHeight = myDataTextView.measuredHeight + loginValueTextView.measuredHeight + surnameValueTextView.measuredHeight +
-                    nameValueTextView.measuredHeight + phoneValueTextView.measuredHeight + emailValueTextView.measuredHeight +
-                    serviceValueTextView.measuredHeight + separatorView.measuredHeight + myAccountsTextView.measuredHeight +
-                    usersValueTextView.measuredHeight + retailersValueTextView.measuredHeight + partnersValueTextView.measuredHeight +
-                    contributorsValueTextView.measuredHeight + convertDpToPx(145)
+        viewHeight = myDataTextView.measuredHeight + loginValueTextView.measuredHeight +
+                surnameValueTextView.measuredHeight + nameValueTextView.measuredHeight +
+                phoneValueTextView.measuredHeight + emailValueTextView.measuredHeight +
+                serviceValueTextView.measuredHeight + separatorView.measuredHeight +
+                myAccountsTextView.measuredHeight + usersValueTextView.measuredHeight +
+                retailersValueTextView.measuredHeight + partnersValueTextView.measuredHeight +
+                contributorsValueTextView.measuredHeight + privacyPolicyLinkTextView.measuredHeight +
+                convertDpToPx(175)
 
         setMeasuredDimension(
             MeasureSpec.makeMeasureSpec(viewWidth, MeasureSpec.EXACTLY),
@@ -272,6 +288,11 @@ class ProfileView(context: Context, attrs: AttributeSet?) : ViewGroup(context, a
         contributorsValueTextView.layoutToTopLeft(
             contributorsTitleTextView.right + convertDpToPx(15),
             contributorsTitleTextView.top
+        )
+
+        privacyPolicyLinkTextView.layoutToTopLeft(
+            (viewWidth - privacyPolicyLinkTextView.measuredWidth) / 2,
+            contributorsTitleTextView.bottom + convertDpToPx(30)
         )
     }
 }

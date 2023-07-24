@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.view.isVisible
 import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.GOLDEN_RATIO
 import net.noliaware.yumi_agent.commun.util.convertDpToPx
@@ -29,6 +30,11 @@ class AuthView(context: Context, attrs: AttributeSet?) : ViewGroup(context, attr
     private lateinit var accessButtonLayout: LinearLayoutCompat
     var callback: AuthViewCallback? by weak()
 
+    data class AuthViewAdapter(
+        val twoFactorAuthModeText: String = "",
+        val twoFactorAuthModeActivated: Boolean = false
+    )
+
     fun interface AuthViewCallback {
         fun onAuthClicked()
     }
@@ -48,7 +54,14 @@ class AuthView(context: Context, attrs: AttributeSet?) : ViewGroup(context, attr
         boAccessTextView = findViewById(R.id.bo_access_text_view)
         boAccessDescriptionTextView = findViewById(R.id.bo_access_description_text_view)
         accessButtonLayout = findViewById(R.id.access_button_layout)
-        accessButtonLayout.setOnClickListener { callback?.onAuthClicked() }
+        accessButtonLayout.setOnClickListener {
+            callback?.onAuthClicked()
+        }
+    }
+
+    fun fillViewWithData(authViewAdapter: AuthViewAdapter) {
+        boAccessDescriptionTextView.text = authViewAdapter.twoFactorAuthModeText
+        accessButtonLayout.isVisible = authViewAdapter.twoFactorAuthModeActivated
     }
 
     fun setUserData(
@@ -91,7 +104,9 @@ class AuthView(context: Context, attrs: AttributeSet?) : ViewGroup(context, attr
             MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         )
 
-        accessButtonLayout.measureWrapContent()
+        if (accessButtonLayout.isVisible) {
+            accessButtonLayout.measureWrapContent()
+        }
 
         boAccessImageView.measure(
             MeasureSpec.makeMeasureSpec(
@@ -133,8 +148,13 @@ class AuthView(context: Context, attrs: AttributeSet?) : ViewGroup(context, attr
             lastLoginTitleTextView.bottom
         )
 
-        val contentHeight = boAccessImageView.measuredHeight + boAccessTextView.measuredHeight + boAccessDescriptionTextView.measuredHeight +
-                accessButtonLayout.measuredHeight + getStatusBarHeight() + convertDpToPx(40)
+        val contentHeight = getStatusBarHeight() + boAccessImageView.measuredHeight +
+                boAccessTextView.measuredHeight + boAccessDescriptionTextView.measuredHeight +
+                if (accessButtonLayout.isVisible) {
+                    accessButtonLayout.measuredHeight + convertDpToPx(15)
+                } else {
+                    0
+                } + convertDpToPx(25)
 
         boAccessImageView.layoutToTopLeft(
             (viewWidth - boAccessImageView.measuredWidth) / 2,

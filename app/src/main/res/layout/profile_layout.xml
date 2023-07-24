@@ -265,6 +265,16 @@
                     android:textColor="@color/grey_2"
                     android:textSize="15sp" />
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/privacy_policy_link_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/omnes_regular"
+                    android:gravity="end"
+                    android:text="@string/privacy_policy_underlined"
+                    android:textColor="@color/grey_2"
+                    android:textSize="15sp" />
+
             </net.noliaware.yumi_agent.feature_profile.presentation.views.ProfileView>
         </androidx.core.widget.NestedScrollView>
     </net.noliaware.yumi_agent.commun.presentation.views.ElevatedCardView>

@@ -7,6 +7,7 @@
     <string name="update_message">Une nouvelle version de l\'application est disponible. Veuillez la télécharger maintenant pour continuer</string>
     <string name="update">Mettre à jour</string>
     <string name="ok">OK</string>
+    <string name="no_internet_connexion">Aucune connexion internet</string>
 
     //Login
     <string name="enter_login_message">Saisissez votre identifiant</string>
@@ -19,10 +20,14 @@
     <string name="cancel">Annuler</string>
 
     //Authentification
+    <string name="privacy_policy">Politique de confidentialité</string>
+    <string name="policy_confirmation">J\'ai lu et j\'accepte</string>
     <string name="last_login">Dernière connexion:</string>
     <string name="last_login_value">%s à %s</string>
     <string name="bo_access">Accès application web</string>
-    <string name="bo_access_description">Génerer un code d\'accès à votre compte sur l\'application web</string>
+    <string name="bo_two_factor_auth_none">La double authentification sur l\'application web est désactivée</string>
+    <string name="bo_two_factor_auth_by_app">Génerer un code d\'accès à votre compte sur l\'application web</string>
+    <string name="bo_two_factor_auth_by_mail">La double authentification sur l\'application web se fait par mail</string>
     <string name="access">Générer un code</string>
     <string name="empty_value">-</string>
     <string name="bo_sign_in_description">Veuillez utiliser ce code pour vous connecter à votre compte sur l\'application web</string>
@@ -46,6 +51,7 @@
         <item quantity="one">%s compte</item>
         <item quantity="other">%s comptes</item>
     </plurals>
+    <string name="privacy_policy_underlined"><u>Politique de confidentialité</u></string>
 
     //Messages
     <string name="mail">Messagerie</string>

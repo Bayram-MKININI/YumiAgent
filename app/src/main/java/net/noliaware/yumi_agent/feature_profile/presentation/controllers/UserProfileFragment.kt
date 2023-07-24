@@ -10,16 +10,28 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import net.noliaware.yumi_agent.R
+import net.noliaware.yumi_agent.commun.ACCOUNT_DATA
+import net.noliaware.yumi_agent.commun.PRIVACY_POLICY_FRAGMENT_TAG
 import net.noliaware.yumi_agent.commun.util.ViewModelState
 import net.noliaware.yumi_agent.commun.util.formatNumber
 import net.noliaware.yumi_agent.commun.util.handleSharedEvent
 import net.noliaware.yumi_agent.commun.util.redirectToLoginScreenFromSharedEvent
+import net.noliaware.yumi_agent.commun.util.withArgs
+import net.noliaware.yumi_agent.feature_auth.presentation.controllers.PrivacyPolicyFragment
+import net.noliaware.yumi_agent.feature_login.domain.model.AccountData
 import net.noliaware.yumi_agent.feature_profile.domain.model.UserProfile
 import net.noliaware.yumi_agent.feature_profile.presentation.views.ProfileParentView
+import net.noliaware.yumi_agent.feature_profile.presentation.views.ProfileView
 import net.noliaware.yumi_agent.feature_profile.presentation.views.ProfileView.ProfileViewAdapter
 
 @AndroidEntryPoint
 class UserProfileFragment : Fragment() {
+
+    companion object {
+        fun newInstance(
+            accountData: AccountData?
+        ) = UserProfileFragment().withArgs(ACCOUNT_DATA to accountData)
+    }
 
     private var profileDataParentView: ProfileParentView? = null
     private val viewModel by viewModels<UserProfileFragmentViewModel>()
@@ -31,6 +43,7 @@ class UserProfileFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.profile_layout, container, false).apply {
             profileDataParentView = this as ProfileParentView
+            profileDataParentView?.getProfileView?.callback = profileViewCallback
         }
     }
 
@@ -88,6 +101,18 @@ class UserProfileFragment : Fragment() {
             )
         ).also {
             profileDataParentView?.getProfileView?.fillViewWithData(it)
+        }
+    }
+
+    private val profileViewCallback: ProfileView.ProfileViewCallback by lazy {
+        ProfileView.ProfileViewCallback {
+            PrivacyPolicyFragment.newInstance(
+                privacyPolicyUrl = viewModel.accountData?.privacyPolicyUrl.orEmpty(),
+                isConfirmationRequired = false
+            ).show(
+                childFragmentManager.beginTransaction(),
+                PRIVACY_POLICY_FRAGMENT_TAG
+            )
         }
     }
 

@@ -4,6 +4,7 @@ import net.noliaware.yumi_agent.commun.*
 import net.noliaware.yumi_agent.commun.data.remote.dto.ResponseDTO
 import net.noliaware.yumi_agent.feature_alerts.data.remote.dto.AlertsDTO
 import net.noliaware.yumi_agent.feature_auth.data.repository.dto.BOSignInDTO
+import net.noliaware.yumi_agent.feature_auth.data.repository.dto.UpdatePrivacyPolicyResponseDTO
 import net.noliaware.yumi_agent.feature_login.data.remote.dto.AccountDataDTO
 import net.noliaware.yumi_agent.feature_login.data.remote.dto.InitDTO
 import net.noliaware.yumi_agent.feature_message.data.remote.dto.*
@@ -32,6 +33,15 @@ interface RemoteApi {
         @Path(TOKEN) token: String,
         @FieldMap params: Map<String, String>
     ): ResponseDTO<AccountDataDTO>
+
+    @FormUrlEncoded
+    @POST("$SET_PRIVACY_POLICY_READ_STATUS/{$TIMESTAMP}/{$SALT_STRING}/{$TOKEN}")
+    suspend fun updatePrivacyPolicyReadStatus(
+        @Path(TIMESTAMP) timestamp: String,
+        @Path(SALT_STRING) saltString: String,
+        @Path(TOKEN) token: String,
+        @FieldMap params: Map<String, String>
+    ): ResponseDTO<UpdatePrivacyPolicyResponseDTO>
 
     @FormUrlEncoded
     @POST("$GET_BACK_OFFICE_SIGN_IN_CODE/{$TIMESTAMP}/{$SALT_STRING}/{$TOKEN}")

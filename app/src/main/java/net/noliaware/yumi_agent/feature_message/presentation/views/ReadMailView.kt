@@ -122,8 +122,7 @@ class ReadMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
 
         deleteIconView.measureWrapContent()
 
-        val contentViewHeight =
-            viewHeight - (headerView.measuredHeight + messageIconView.measuredHeight / 2 +
+        val contentViewHeight = viewHeight - (headerView.measuredHeight + messageIconView.measuredHeight / 2 +
                     convertDpToPx(25))
 
         val contentViewWidth = viewWidth * 95 / 100
