@@ -9,8 +9,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import net.noliaware.yumi_agent.commun.DATA_SHOULD_REFRESH
 import net.noliaware.yumi_agent.commun.MESSAGE_ID
-import net.noliaware.yumi_agent.commun.MESSAGE_PRIORITY
-import net.noliaware.yumi_agent.commun.MESSAGE_SUBJECT
 import net.noliaware.yumi_agent.commun.presentation.EventsHelper
 import net.noliaware.yumi_agent.feature_message.data.repository.MessageRepository
 import net.noliaware.yumi_agent.feature_message.domain.model.Message
@@ -25,9 +23,6 @@ class ReadInboxMailFragmentViewModel @Inject constructor(
     val getMessageEventsHelper = EventsHelper<Message>()
     val deleteMessageEventsHelper = EventsHelper<Boolean>()
     val messageId get() = savedStateHandle.get<String>(MESSAGE_ID)
-    val messageSubject get() = savedStateHandle.get<String>(MESSAGE_SUBJECT)
-    val messagePriority get() = savedStateHandle.get<Int>(MESSAGE_PRIORITY)
-
     var receivedMessageListShouldRefresh
         get() = savedStateHandle.get<Boolean>(DATA_SHOULD_REFRESH)
         set(value) = savedStateHandle.set(DATA_SHOULD_REFRESH, value)

@@ -17,8 +17,6 @@ import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.HOURS_TIME_FORMAT
 import net.noliaware.yumi_agent.commun.LONG_DATE_WITH_DAY_FORMAT
 import net.noliaware.yumi_agent.commun.MESSAGE_ID
-import net.noliaware.yumi_agent.commun.MESSAGE_PRIORITY
-import net.noliaware.yumi_agent.commun.MESSAGE_SUBJECT
 import net.noliaware.yumi_agent.commun.SEND_MESSAGES_FRAGMENT_TAG
 import net.noliaware.yumi_agent.commun.presentation.mappers.PriorityMapper
 import net.noliaware.yumi_agent.commun.util.ViewModelState
@@ -37,13 +35,9 @@ class ReadInboxMailFragment : AppCompatDialogFragment() {
 
     companion object {
         fun newInstance(
-            messageId: String,
-            messageSubject: String? = null,
-            messagePriority: Int? = null
+            messageId: String
         ) = ReadInboxMailFragment().withArgs(
-            MESSAGE_ID to messageId,
-            MESSAGE_SUBJECT to messageSubject,
-            MESSAGE_PRIORITY to messagePriority
+            MESSAGE_ID to messageId
         )
     }
 
