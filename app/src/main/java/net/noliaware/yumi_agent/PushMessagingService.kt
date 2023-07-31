@@ -1,11 +1,13 @@
 package net.noliaware.yumi_agent
 
 import android.content.Intent
-import android.os.Looper
-import androidx.core.os.HandlerCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import net.noliaware.yumi_agent.commun.ACTION_PUSH_DATA
 import net.noliaware.yumi_agent.commun.PUSH_BODY
 import net.noliaware.yumi_agent.commun.PUSH_TITLE
@@ -13,6 +15,8 @@ import net.noliaware.yumi_agent.commun.PUSH_TITLE
 class PushMessagingService : FirebaseMessagingService() {
 
     private var broadcaster: LocalBroadcastManager? = null
+    private val job = SupervisorJob()
+    private val scope = CoroutineScope(Dispatchers.Main + job)
 
     override fun onCreate() {
         broadcaster = LocalBroadcastManager.getInstance(this)
@@ -24,9 +28,7 @@ class PushMessagingService : FirebaseMessagingService() {
     }
 
     private fun handleMessage(remoteMessage: RemoteMessage) {
-        HandlerCompat.createAsync(
-            Looper.getMainLooper()
-        ).post {
+        scope.launch {
             remoteMessage.notification?.let { notification ->
                 val intent = Intent(ACTION_PUSH_DATA)
                 intent.putExtra(PUSH_TITLE, notification.title)
@@ -34,5 +36,10 @@ class PushMessagingService : FirebaseMessagingService() {
                 broadcaster?.sendBroadcast(intent)
             }
         }
+    }
+
+    override fun onDestroy() {
+        job.cancel()
+        super.onDestroy()
     }
 }
