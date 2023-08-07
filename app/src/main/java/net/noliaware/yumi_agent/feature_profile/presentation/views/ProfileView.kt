@@ -11,6 +11,7 @@ import net.noliaware.yumi_agent.commun.util.layoutToTopLeft
 import net.noliaware.yumi_agent.commun.util.layoutToTopRight
 import net.noliaware.yumi_agent.commun.util.measureWrapContent
 import net.noliaware.yumi_agent.commun.util.weak
+import kotlin.math.max
 
 class ProfileView(context: Context, attrs: AttributeSet?) : ViewGroup(context, attrs) {
 
@@ -154,14 +155,19 @@ class ProfileView(context: Context, attrs: AttributeSet?) : ViewGroup(context, a
 
         privacyPolicyLinkTextView.measureWrapContent()
 
-        viewHeight = myDataTextView.measuredHeight + loginValueTextView.measuredHeight +
-                surnameValueTextView.measuredHeight + nameValueTextView.measuredHeight +
-                phoneValueTextView.measuredHeight + emailValueTextView.measuredHeight +
-                serviceValueTextView.measuredHeight + separatorView.measuredHeight +
-                myAccountsTextView.measuredHeight + usersValueTextView.measuredHeight +
-                retailersValueTextView.measuredHeight + partnersValueTextView.measuredHeight +
-                contributorsValueTextView.measuredHeight + privacyPolicyLinkTextView.measuredHeight +
-                convertDpToPx(175)
+        viewHeight = myDataTextView.measuredHeight +
+                max(loginTitleTextView.measuredHeight, loginValueTextView.measuredHeight) +
+                max(surnameTitleTextView.measuredHeight, surnameValueTextView.measuredHeight) +
+                max(nameTitleTextView.measuredHeight, nameValueTextView.measuredHeight) +
+                max(phoneTitleTextView.measuredHeight, phoneValueTextView.measuredHeight) +
+                max(emailTitleTextView.measuredHeight, emailValueTextView.measuredHeight) +
+                max(serviceTitleTextView.measuredHeight, serviceValueTextView.measuredHeight) +
+                separatorView.measuredHeight + myAccountsTextView.measuredHeight +
+                max(usersTitleTextView.measuredHeight, usersValueTextView.measuredHeight) +
+                max(retailersTitleTextView.measuredHeight, retailersValueTextView.measuredHeight) +
+                max(partnersTitleTextView.measuredHeight, partnersValueTextView.measuredHeight) +
+                max(contributorsTitleTextView.measuredHeight, contributorsValueTextView.measuredHeight) +
+                privacyPolicyLinkTextView.measuredHeight + convertDpToPx(175)
 
         setMeasuredDimension(
             MeasureSpec.makeMeasureSpec(viewWidth, MeasureSpec.EXACTLY),
