@@ -10,13 +10,13 @@ plugins {
 
 android {
     namespace = "net.noliaware.yumi_agent"
-    compileSdk = 33
-    buildToolsVersion = "33.0.2"
+    compileSdk = 34
+    buildToolsVersion = "34.0.0"
 
     defaultConfig {
         applicationId = "net.noliaware.yumi_agent"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
