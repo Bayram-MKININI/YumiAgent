@@ -57,6 +57,8 @@
     <string name="mail">Messagerie</string>
     <string name="sent">Envoyés</string>
     <string name="received">Reçus</string>
+    <string name="no_received_message">Aucun message reçu</string>
+    <string name="no_sent_message">Aucun message envoyé</string>
     <string name="recipient">Destinataire(s)</string>
     <string name="recipient_empty_error">Veuillez saisir un compte valide</string>
     <string name="empty_hint">&#160;</string>
@@ -78,6 +80,7 @@
 
     //Alert
     <string name="notifications">Notifications</string>
+    <string name="no_notification">Aucune notification reçue</string>
     <string name="received_at">Reçu le %s à %s</string>
 
 </resources>

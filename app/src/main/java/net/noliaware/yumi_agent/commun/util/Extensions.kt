@@ -232,7 +232,6 @@ fun Fragment.redirectToLoginScreenFromSharedEvent(sharedEvent: UIEvent) {
 
 fun Fragment.handlePaginationError(loadState: CombinedLoadStates) {
     when (val currentState = loadState.refresh) {
-        is LoadState.Loading -> Unit
         is LoadState.Error -> {
             if (
                 currentState.error is PaginationException &&
