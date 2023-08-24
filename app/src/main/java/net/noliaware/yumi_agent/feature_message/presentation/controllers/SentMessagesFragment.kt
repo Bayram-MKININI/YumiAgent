@@ -77,7 +77,7 @@ class SentMessagesFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         messagesListView = null
+        super.onDestroyView()
     }
 }

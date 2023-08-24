@@ -246,8 +246,11 @@ fun Fragment.handlePaginationError(loadState: CombinedLoadStates) {
 }
 
 private fun Fragment.redirectToLoginScreenInternal() {
-    activity?.finish()
-    startActivity(Intent(requireActivity(), LoginActivity::class.java))
+    startActivity(
+        Intent(requireActivity(), LoginActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+    )
 }
 
 inline fun <reified T : Serializable> Intent.getSerializableExtraCompat(key: String): T? =

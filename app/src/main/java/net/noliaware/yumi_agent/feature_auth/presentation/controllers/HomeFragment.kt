@@ -122,7 +122,7 @@ class HomeFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         homeView = null
+        super.onDestroyView()
     }
 }
