@@ -10,12 +10,13 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.children
 import androidx.core.widget.doAfterTextChanged
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.time.delay
 import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.util.convertDpToPx
 import net.noliaware.yumi_agent.commun.util.inflate
 import net.noliaware.yumi_agent.commun.util.viewScope
+import java.time.Duration
 
 class MailRecipientListView @JvmOverloads constructor(
     context: Context,
@@ -57,13 +58,13 @@ class MailRecipientListView @JvmOverloads constructor(
             debounceJob = viewScope.launch {
                 val text = it.toString()
                 if (text.lastOrNull() == '@') {
-                    delay(300)
+                    delay(Duration.ofMillis(300))
                     recipientEditText.post {
                         recipientEditText.append(mailDomain)
                     }
                 }
                 if (listOf(' ', ',').any { symbol -> text.lastOrNull() == symbol }) {
-                    delay(50)
+                    delay(Duration.ofMillis(50))
                     val mail = text.dropLast(1)
                     validateMail(mail)
                 }

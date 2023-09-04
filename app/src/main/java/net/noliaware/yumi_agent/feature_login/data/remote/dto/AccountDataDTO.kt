@@ -16,7 +16,7 @@ data class AccountDataDTO(
     @Json(name = "welcomeUser")
     val userName: String = "",
     @Json(name = "lastConnectionTimestamp")
-    val lastConnectionTimestamp: Long = 0,
+    val lastConnectionTimestamp: Long? = 0,
     @Json(name = "encryptionVector")
     val encryptionVector: String = "",
     @Json(name = "newAlertCount")

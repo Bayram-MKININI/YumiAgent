@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.GOLDEN_RATIO
@@ -67,11 +68,18 @@ class AuthView(context: Context, attrs: AttributeSet?) : ViewGroup(context, attr
     fun setUserData(
         helloText: String,
         userName: String,
-        lastLogin: String
+        lastLoginTitle: String,
+        lastLoginValue: String?
     ) {
         helloTextView.text = helloText
         nameTextView.text = userName
-        lastLoginValueTextView.text = lastLogin
+        lastLoginTitleTextView.text = lastLoginTitle
+        lastLoginValue?.let {
+            lastLoginValueTextView.isVisible = true
+            lastLoginValueTextView.text = lastLoginValue
+        } ?: {
+            lastLoginValueTextView.isGone = true
+        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -95,7 +103,9 @@ class AuthView(context: Context, attrs: AttributeSet?) : ViewGroup(context, attr
 
         lastLoginTitleTextView.measureWrapContent()
 
-        lastLoginValueTextView.measureWrapContent()
+        if (lastLoginValueTextView.isVisible) {
+            lastLoginValueTextView.measureWrapContent()
+        }
 
         boAccessTextView.measureWrapContent()
 
@@ -143,10 +153,12 @@ class AuthView(context: Context, attrs: AttributeSet?) : ViewGroup(context, attr
             helloTextView.bottom + convertDpToPx(5)
         )
 
-        lastLoginValueTextView.layoutToBottomLeft(
-            lastLoginTitleTextView.right + convertDpToPx(2),
-            lastLoginTitleTextView.bottom
-        )
+        if (lastLoginValueTextView.isVisible) {
+            lastLoginValueTextView.layoutToBottomLeft(
+                lastLoginTitleTextView.right + convertDpToPx(2),
+                lastLoginTitleTextView.bottom
+            )
+        }
 
         val contentHeight = getStatusBarHeight() + boAccessImageView.measuredHeight +
                 boAccessTextView.measuredHeight + boAccessDescriptionTextView.measuredHeight +

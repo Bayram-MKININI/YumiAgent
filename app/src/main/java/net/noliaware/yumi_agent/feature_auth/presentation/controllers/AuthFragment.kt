@@ -52,9 +52,12 @@ class AuthFragment : Fragment() {
 
     private fun bindViewToData(accountData: AccountData) {
         authView?.setUserData(
-            accountData.helloMessage,
-            accountData.userName,
-            accountData.lastConnectionTimestamp.let {
+            helloText = accountData.helloMessage,
+            userName = accountData.userName,
+            lastLoginTitle = accountData.lastConnectionTimestamp?.let {
+                getString(R.string.last_login)
+            } ?: getString(R.string.welcome_to_yumi),
+            lastLoginValue = accountData.lastConnectionTimestamp?.let {
                 getString(
                     R.string.last_login_value,
                     it.parseTimestampToDate(DAY_OF_MONTH_TEXT_DATE_FORMAT),
@@ -70,6 +73,7 @@ class AuthFragment : Fragment() {
             authView?.fillViewWithData(it)
         }
     }
+
     private fun map2FAModeText(
         twoFactorAuthMode: TFAMode?
     ) = when (twoFactorAuthMode) {
