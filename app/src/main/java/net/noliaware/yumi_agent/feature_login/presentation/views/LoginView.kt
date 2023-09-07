@@ -21,6 +21,7 @@ import net.noliaware.yumi_agent.commun.util.weak
 class LoginView(context: Context, attrs: AttributeSet?) : ElevatedCardView(context, attrs) {
 
     private lateinit var inputMessageTextView: TextView
+    private lateinit var inputLayoutLoginShimmerView: ShimmerFrameLayout
     private lateinit var inputLayoutLogin: TextInputLayout
     private lateinit var inputLogin: EditText
     private lateinit var confirmImageView: ImageView
