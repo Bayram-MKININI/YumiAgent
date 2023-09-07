@@ -40,7 +40,6 @@ class MessagesListView(context: Context, attrs: AttributeSet?) : ViewGroup(conte
         shimmerView = findViewById(R.id.shimmer_view)
         shimmerRecyclerView = shimmerView.findViewById(R.id.shimmer_recycler_view)
         setUpRecyclerView(shimmerRecyclerView)
-        shimmerRecyclerView.setHasFixedSize(true)
         BaseAdapter(listOf(1)).apply {
             expressionOnCreateViewHolder = { viewGroup ->
                 viewGroup.inflate(R.layout.message_item_placeholder_layout)

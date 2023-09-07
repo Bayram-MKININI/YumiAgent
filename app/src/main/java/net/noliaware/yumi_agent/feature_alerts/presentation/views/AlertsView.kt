@@ -51,7 +51,6 @@ class AlertsView(context: Context, attrs: AttributeSet?) : ViewGroup(context, at
         shimmerView = findViewById(R.id.shimmer_view)
         shimmerRecyclerView = shimmerView.findViewById(R.id.shimmer_recycler_view)
         setUpRecyclerView(shimmerRecyclerView)
-        shimmerRecyclerView.setHasFixedSize(true)
         BaseAdapter(listOf(1)).apply {
             expressionOnCreateViewHolder = { viewGroup ->
                 viewGroup.inflate(R.layout.alert_item_placeholder_layout)
