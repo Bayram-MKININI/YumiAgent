@@ -62,8 +62,9 @@ class UserProfileFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.eventsHelper.stateFlow.collect { vmState ->
                 when (vmState) {
-                    is ViewModelState.LoadingState -> Unit
+                    is ViewModelState.LoadingState -> profileDataParentView?.setLoadingVisible(true)
                     is ViewModelState.DataState -> vmState.data?.let { userProfile ->
+                        profileDataParentView?.setLoadingVisible(false)
                         bindViewToData(userProfile)
                     }
                 }

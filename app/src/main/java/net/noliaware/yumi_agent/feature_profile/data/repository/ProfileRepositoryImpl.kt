@@ -22,6 +22,8 @@ class ProfileRepositoryImpl(
 
     override fun getUserProfile(): Flow<Resource<UserProfile>> = flow {
 
+        emit(Resource.Loading())
+
         try {
 
             val timestamp = System.currentTimeMillis().toString()

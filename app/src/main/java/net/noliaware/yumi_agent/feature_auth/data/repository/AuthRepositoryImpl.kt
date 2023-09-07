@@ -67,6 +67,8 @@ class AuthRepositoryImpl(
 
     override fun getBackOfficeSignInCode(): Flow<Resource<BOSignIn>> = flow {
 
+        emit(Resource.Loading())
+
         try {
 
             val timestamp = System.currentTimeMillis().toString()

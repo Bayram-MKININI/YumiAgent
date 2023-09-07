@@ -4,15 +4,21 @@ import android.content.Context
 import android.text.Spanned
 import android.text.SpannedString
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
+import com.facebook.shimmer.Shimmer
+import com.facebook.shimmer.ShimmerFrameLayout
 import net.noliaware.yumi_agent.R
+import net.noliaware.yumi_agent.commun.presentation.views.FillableTextWidget
 import net.noliaware.yumi_agent.commun.util.*
 
 class ReadMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, attrs) {
@@ -22,11 +28,13 @@ class ReadMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
     private lateinit var messageIconView: View
     private lateinit var backView: View
     private lateinit var contentView: View
+    private lateinit var shimmerView: ShimmerFrameLayout
     private lateinit var deleteIconView: View
+    private lateinit var iconPlaceholderView: View
     private lateinit var priorityIconImageView: ImageView
-    private lateinit var titleTextView: TextView
-    private lateinit var mailTextView: TextView
-    private lateinit var timeTextView: TextView
+    private lateinit var titleFillableTextWidget: FillableTextWidget
+    private lateinit var mailFillableTextWidget: FillableTextWidget
+    private lateinit var timeFillableTextWidget: FillableTextWidget
     private lateinit var messageParentView: View
     private lateinit var messageTextView: TextView
     private lateinit var composeButton: View
@@ -66,16 +74,37 @@ class ReadMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
         deleteIconView.setOnClickListener(onClickListener)
 
         contentView = findViewById(R.id.content_layout)
-        priorityIconImageView = contentView.findViewById(R.id.priority_icon_image_view)
-        titleTextView = contentView.findViewById(R.id.title_text_view)
-        mailTextView = contentView.findViewById(R.id.mail_text_view)
-        timeTextView = contentView.findViewById(R.id.time_text_view)
+        shimmerView = findViewById(R.id.shimmer_view)
+        iconPlaceholderView = shimmerView.findViewById(R.id.icon_placeholder_view)
+        priorityIconImageView = shimmerView.findViewById(R.id.priority_icon_image_view)
 
-        messageParentView = contentView.findViewById(R.id.message_parent_view)
+        titleFillableTextWidget = shimmerView.findViewById(R.id.title_fillable_text_view)
+        titleFillableTextWidget.textView.apply {
+            typeface = ResourcesCompat.getFont(context, R.font.omnes_semibold_regular)
+            setTextColor(context.getColorCompat(R.color.grey_2))
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 19f)
+        }
+        titleFillableTextWidget.setFixedWidth(true)
+
+        mailFillableTextWidget = shimmerView.findViewById(R.id.mail_fillable_text_view)
+        mailFillableTextWidget.setUpValueTextView()
+
+        timeFillableTextWidget = shimmerView.findViewById(R.id.time_fillable_text_view)
+        timeFillableTextWidget.setUpValueTextView()
+
+        messageParentView = shimmerView.findViewById(R.id.message_parent_view)
         messageTextView = messageParentView.findViewById(R.id.message_text_view)
 
         composeButton = findViewById(R.id.compose_layout)
         composeButton.setOnClickListener(onClickListener)
+    }
+
+    private fun FillableTextWidget.setUpValueTextView() {
+        textView.apply {
+            typeface = ResourcesCompat.getFont(context, R.font.omnes_regular)
+            setTextColor(context.getColorCompat(R.color.grey_2))
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
+        }
     }
 
     private val onClickListener: OnClickListener by lazy {
@@ -89,12 +118,30 @@ class ReadMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
     }
 
     fun fillViewWithData(readMailViewAdapter: ReadMailViewAdapter) {
-        priorityIconImageView.setImageResource(readMailViewAdapter.priorityIconRes)
-        titleTextView.text = readMailViewAdapter.subject
-        mailTextView.text = readMailViewAdapter.mail
-        timeTextView.text = readMailViewAdapter.time
+        priorityIconImageView.apply {
+            iconPlaceholderView.isGone = true
+            setImageResource(readMailViewAdapter.priorityIconRes)
+            isVisible = true
+        }
+        titleFillableTextWidget.setText(readMailViewAdapter.subject)
+        mailFillableTextWidget.setText(readMailViewAdapter.mail)
+        timeFillableTextWidget.setText(readMailViewAdapter.time)
         messageTextView.text = readMailViewAdapter.message
         composeButton.isVisible = readMailViewAdapter.replyPossible
+    }
+
+    fun setLoadingVisible(visible: Boolean) {
+        shimmerView.setShimmer(
+            Shimmer.AlphaHighlightBuilder()
+                .setBaseAlpha(if (visible) 0.4f else 1f)
+                .setDuration(resources.getInteger(R.integer.shimmer_animation_duration_ms).toLong())
+                .build()
+        )
+        if (visible) {
+            shimmerView.startShimmer()
+        } else {
+            shimmerView.stopShimmer()
+        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -123,7 +170,7 @@ class ReadMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
         deleteIconView.measureWrapContent()
 
         val contentViewHeight = viewHeight - (headerView.measuredHeight + messageIconView.measuredHeight / 2 +
-                    convertDpToPx(25))
+                convertDpToPx(25))
 
         val contentViewWidth = viewWidth * 95 / 100
         contentView.measure(
@@ -131,24 +178,40 @@ class ReadMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
             MeasureSpec.makeMeasureSpec(contentViewHeight, MeasureSpec.EXACTLY)
         )
 
-        priorityIconImageView.measureWrapContent()
+        if (iconPlaceholderView.isVisible) {
+            iconPlaceholderView.measure(
+                MeasureSpec.makeMeasureSpec(convertDpToPx(22), MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(convertDpToPx(22), MeasureSpec.EXACTLY)
+            )
+        }
 
-        val titleTextViewWidth = contentViewWidth * 95 / 100 -
-                (priorityIconImageView.measuredWidth + convertDpToPx(2))
-        titleTextView.measure(
-            MeasureSpec.makeMeasureSpec(titleTextViewWidth, MeasureSpec.AT_MOST),
-            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+        if (priorityIconImageView.isVisible) {
+            priorityIconImageView.measureWrapContent()
+        }
+
+        val titleTextViewWidth = contentViewWidth * 95 / 100 - if (priorityIconImageView.isVisible) {
+            priorityIconImageView.measuredWidth + convertDpToPx(2)
+        } else {
+            iconPlaceholderView.measuredWidth + convertDpToPx(8)
+        }
+
+        titleFillableTextWidget.measure(
+            MeasureSpec.makeMeasureSpec(titleTextViewWidth, MeasureSpec.EXACTLY),
+            MeasureSpec.makeMeasureSpec(convertDpToPx(22), MeasureSpec.EXACTLY)
         )
 
-        mailTextView.measure(
-            MeasureSpec.makeMeasureSpec(titleTextViewWidth, MeasureSpec.AT_MOST),
-            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+        mailFillableTextWidget.measure(
+            MeasureSpec.makeMeasureSpec(viewWidth * 4 / 10, MeasureSpec.EXACTLY),
+            MeasureSpec.makeMeasureSpec(convertDpToPx(15), MeasureSpec.EXACTLY)
         )
 
-        timeTextView.measureWrapContent()
+        timeFillableTextWidget.measure(
+            MeasureSpec.makeMeasureSpec(viewWidth * 5 / 10, MeasureSpec.EXACTLY),
+            MeasureSpec.makeMeasureSpec(convertDpToPx(15), MeasureSpec.EXACTLY)
+        )
 
-        val messageParentViewHeight = contentView.measuredHeight - (titleTextView.measuredHeight + timeTextView.measuredHeight +
-                timeTextView.measuredHeight + convertDpToPx(50))
+        val messageParentViewHeight = shimmerView.measuredHeight - (titleFillableTextWidget.measuredHeight +
+                mailFillableTextWidget.measuredHeight + timeFillableTextWidget.measuredHeight + convertDpToPx(50))
 
         messageParentView.measure(
             MeasureSpec.makeMeasureSpec(contentViewWidth * 95 / 100, MeasureSpec.EXACTLY),
@@ -158,7 +221,7 @@ class ReadMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
         if (composeButton.isVisible) {
             composeButton.measureWrapContent()
             val availableSpaceForMessage = messageParentView.measuredHeight - (composeButton.measuredHeight +
-                        convertDpToPx(30))
+                    convertDpToPx(30))
             val extraPadding = messageTextView.measuredHeight - availableSpaceForMessage
             if (extraPadding > 0) {
                 messageParentView.updatePadding(bottom = extraPadding)
@@ -198,29 +261,42 @@ class ReadMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, 
             messageIconView.bottom + convertDpToPx(15)
         )
 
-        priorityIconImageView.layoutToTopLeft(
-            convertDpToPx(5),
-            convertDpToPx(19)
-        )
+        if (iconPlaceholderView.isVisible) {
+            iconPlaceholderView.layoutToTopLeft(
+                convertDpToPx(5),
+                convertDpToPx(19)
+            )
+        }
 
-        titleTextView.layoutToTopLeft(
-            priorityIconImageView.right + convertDpToPx(2),
+        if (priorityIconImageView.isVisible) {
+            priorityIconImageView.layoutToTopLeft(
+                convertDpToPx(5),
+                convertDpToPx(19)
+            )
+        }
+
+        titleFillableTextWidget.layoutToTopLeft(
+            if (priorityIconImageView.isVisible) {
+                priorityIconImageView.right + convertDpToPx(2)
+            } else {
+                iconPlaceholderView.right + convertDpToPx(8)
+            },
             convertDpToPx(20)
         )
 
-        mailTextView.layoutToTopLeft(
-            titleTextView.left,
-            titleTextView.bottom + convertDpToPx(5)
+        mailFillableTextWidget.layoutToTopLeft(
+            titleFillableTextWidget.left,
+            titleFillableTextWidget.bottom + convertDpToPx(5)
         )
 
-        timeTextView.layoutToTopLeft(
-            titleTextView.left,
-            mailTextView.bottom + convertDpToPx(5)
+        timeFillableTextWidget.layoutToTopLeft(
+            titleFillableTextWidget.left,
+            mailFillableTextWidget.bottom + convertDpToPx(5)
         )
 
         messageParentView.layoutToTopLeft(
             (contentView.measuredWidth - messageParentView.measuredWidth) / 2,
-            timeTextView.bottom + convertDpToPx(10)
+            timeFillableTextWidget.bottom + convertDpToPx(10)
         )
 
         deleteIconView.layoutToTopRight(

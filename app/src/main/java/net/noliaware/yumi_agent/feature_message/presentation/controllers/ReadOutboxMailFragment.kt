@@ -98,8 +98,9 @@ class ReadOutboxMailFragment : AppCompatDialogFragment() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.getMessageEventsHelper.stateFlow.collect { vmState ->
                 when (vmState) {
-                    is ViewModelState.LoadingState -> Unit
+                    is ViewModelState.LoadingState -> readMailView?.setLoadingVisible(true)
                     is ViewModelState.DataState -> vmState.data?.let { message ->
+                        readMailView?.setLoadingVisible(false)
                         bindViewToData(message)
                     }
                 }

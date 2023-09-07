@@ -5,6 +5,8 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.facebook.shimmer.Shimmer
+import com.facebook.shimmer.ShimmerFrameLayout
 import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.util.convertDpToPx
 import net.noliaware.yumi_agent.commun.util.getStatusBarHeight
@@ -17,7 +19,7 @@ class ProfileParentView(context: Context, attrs: AttributeSet?) : ViewGroup(cont
     private lateinit var titleTextView: TextView
     private lateinit var profileIconView: View
     private lateinit var contentView: View
-    private lateinit var scrollView: View
+    private lateinit var shimmerView: ShimmerFrameLayout
     private lateinit var profileView: ProfileView
 
     val getProfileView get() = profileView
@@ -32,8 +34,22 @@ class ProfileParentView(context: Context, attrs: AttributeSet?) : ViewGroup(cont
         titleTextView = findViewById(R.id.title_text_view)
         profileIconView = findViewById(R.id.profile_icon_view)
         contentView = findViewById(R.id.content_layout)
-        scrollView = contentView.findViewById(R.id.scroll_view)
-        profileView = scrollView.findViewById(R.id.profile_view)
+        shimmerView = contentView.findViewById(R.id.shimmer_view)
+        profileView = shimmerView.findViewById(R.id.profile_view)
+    }
+
+    fun setLoadingVisible(visible: Boolean) {
+        shimmerView.setShimmer(
+            Shimmer.AlphaHighlightBuilder()
+                .setBaseAlpha(if (visible) 0.4f else 1f)
+                .setDuration(resources.getInteger(R.integer.shimmer_animation_duration_ms).toLong())
+                .build()
+        )
+        if (visible) {
+            shimmerView.startShimmer()
+        } else {
+            shimmerView.stopShimmer()
+        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -60,11 +76,6 @@ class ProfileParentView(context: Context, attrs: AttributeSet?) : ViewGroup(cont
         val contentViewHeight = viewHeight - (headerView.measuredHeight + profileIconView.measuredHeight / 2 +
                     sideMargin + convertDpToPx(35))
         contentView.measure(
-            MeasureSpec.makeMeasureSpec(contentViewWidth, MeasureSpec.EXACTLY),
-            MeasureSpec.makeMeasureSpec(contentViewHeight, MeasureSpec.EXACTLY)
-        )
-
-        scrollView.measure(
             MeasureSpec.makeMeasureSpec(contentViewWidth, MeasureSpec.EXACTLY),
             MeasureSpec.makeMeasureSpec(contentViewHeight, MeasureSpec.EXACTLY)
         )

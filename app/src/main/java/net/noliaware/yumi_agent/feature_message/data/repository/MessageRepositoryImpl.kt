@@ -2,6 +2,7 @@ package net.noliaware.yumi_agent.feature_message.data.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import net.noliaware.yumi_agent.commun.DELETE_INBOX_MESSAGE
@@ -69,6 +70,8 @@ class MessageRepositoryImpl(
                 ),
                 params = generateGetMessageParams(messageId, GET_INBOX_MESSAGE)
             )
+
+            delay(10000)
 
             val sessionNoFailure = handleSessionWithNoFailure(
                 session = remoteData.session,
