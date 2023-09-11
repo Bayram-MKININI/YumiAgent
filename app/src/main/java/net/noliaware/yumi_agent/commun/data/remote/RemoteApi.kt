@@ -19,8 +19,8 @@ import net.noliaware.yumi_agent.commun.ApiParameters.TIMESTAMP
 import net.noliaware.yumi_agent.commun.ApiParameters.TOKEN
 import net.noliaware.yumi_agent.commun.data.remote.dto.ResponseDTO
 import net.noliaware.yumi_agent.feature_alerts.data.remote.dto.AlertsDTO
-import net.noliaware.yumi_agent.feature_auth.data.repository.dto.BOSignInDTO
-import net.noliaware.yumi_agent.feature_auth.data.repository.dto.UpdatePrivacyPolicyResponseDTO
+import net.noliaware.yumi_agent.feature_auth.data.remote.dto.BOSignInDTO
+import net.noliaware.yumi_agent.feature_auth.data.remote.dto.UpdatePrivacyPolicyResponseDTO
 import net.noliaware.yumi_agent.feature_login.data.remote.dto.AccountDataDTO
 import net.noliaware.yumi_agent.feature_login.data.remote.dto.InitDTO
 import net.noliaware.yumi_agent.feature_message.data.remote.dto.*

@@ -15,8 +15,9 @@ import net.noliaware.yumi_agent.feature_profile.domain.repository.ProfileReposit
 import okio.IOException
 import retrofit2.HttpException
 import java.util.UUID
+import javax.inject.Inject
 
-class ProfileRepositoryImpl(
+class ProfileRepositoryImpl @Inject constructor(
     private val api: RemoteApi,
     private val sessionData: SessionData
 ) : ProfileRepository {

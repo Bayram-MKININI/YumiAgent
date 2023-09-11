@@ -16,8 +16,9 @@ import net.noliaware.yumi_agent.feature_auth.domain.repository.AuthRepository
 import okio.IOException
 import retrofit2.HttpException
 import java.util.UUID
+import javax.inject.Inject
 
-class AuthRepositoryImpl(
+class AuthRepositoryImpl @Inject constructor(
     private val api: RemoteApi,
     private val sessionData: SessionData
 ) : AuthRepository {

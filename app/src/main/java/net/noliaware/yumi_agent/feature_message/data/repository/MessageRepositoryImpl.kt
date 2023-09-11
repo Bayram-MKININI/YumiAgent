@@ -28,8 +28,9 @@ import net.noliaware.yumi_agent.feature_message.domain.repository.MessageReposit
 import okio.IOException
 import retrofit2.HttpException
 import java.util.UUID
+import javax.inject.Inject
 
-class MessageRepositoryImpl(
+class MessageRepositoryImpl @Inject constructor(
     private val api: RemoteApi,
     private val sessionData: SessionData
 ) : MessageRepository {
