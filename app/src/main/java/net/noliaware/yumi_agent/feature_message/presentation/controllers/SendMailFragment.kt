@@ -13,8 +13,8 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import net.noliaware.yumi_agent.R
-import net.noliaware.yumi_agent.commun.DOMAIN_NAME
-import net.noliaware.yumi_agent.commun.MESSAGE
+import net.noliaware.yumi_agent.commun.ApiParameters.MESSAGE
+import net.noliaware.yumi_agent.commun.Args.DOMAIN_NAME
 import net.noliaware.yumi_agent.commun.domain.model.Priority
 import net.noliaware.yumi_agent.commun.presentation.mappers.PriorityMapper
 import net.noliaware.yumi_agent.commun.util.ViewModelState

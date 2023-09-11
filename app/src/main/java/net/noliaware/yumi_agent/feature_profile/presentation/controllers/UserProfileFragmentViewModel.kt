@@ -7,10 +7,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import net.noliaware.yumi_agent.commun.ACCOUNT_DATA
+import net.noliaware.yumi_agent.commun.Args.ACCOUNT_DATA
 import net.noliaware.yumi_agent.commun.presentation.EventsHelper
 import net.noliaware.yumi_agent.feature_login.domain.model.AccountData
-import net.noliaware.yumi_agent.feature_profile.data.repository.ProfileRepository
+import net.noliaware.yumi_agent.feature_profile.domain.repository.ProfileRepository
 import net.noliaware.yumi_agent.feature_profile.domain.model.UserProfile
 import javax.inject.Inject
 

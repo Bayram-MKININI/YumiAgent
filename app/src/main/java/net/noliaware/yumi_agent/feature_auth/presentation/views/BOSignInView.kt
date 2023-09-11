@@ -9,7 +9,11 @@ import net.noliaware.yumi_agent.commun.util.convertDpToPx
 import net.noliaware.yumi_agent.commun.util.layoutToTopLeft
 import net.noliaware.yumi_agent.commun.util.measureWrapContent
 
-class BOSignInView(context: Context, attrs: AttributeSet?) : ElevatedCardView(context, attrs) {
+class BOSignInView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : ElevatedCardView(context, attrs, defStyle) {
 
     private lateinit var descriptionTextView: TextView
     private lateinit var codeTextView: TextView

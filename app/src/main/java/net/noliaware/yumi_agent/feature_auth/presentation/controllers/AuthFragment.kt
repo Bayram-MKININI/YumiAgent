@@ -8,10 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import net.noliaware.yumi_agent.R
-import net.noliaware.yumi_agent.commun.ACCOUNT_DATA
-import net.noliaware.yumi_agent.commun.BO_SIGN_IN_FRAGMENT_TAG
-import net.noliaware.yumi_agent.commun.DAY_OF_MONTH_TEXT_DATE_FORMAT
-import net.noliaware.yumi_agent.commun.HOURS_TIME_FORMAT
+import net.noliaware.yumi_agent.commun.Args.ACCOUNT_DATA
+import net.noliaware.yumi_agent.commun.DateTime.DAY_OF_MONTH_TEXT_DATE_FORMAT
+import net.noliaware.yumi_agent.commun.DateTime.HOURS_TIME_FORMAT
+import net.noliaware.yumi_agent.commun.FragmentTags.BO_SIGN_IN_FRAGMENT_TAG
 import net.noliaware.yumi_agent.commun.util.inflate
 import net.noliaware.yumi_agent.commun.util.parseTimestampToDate
 import net.noliaware.yumi_agent.commun.util.withArgs

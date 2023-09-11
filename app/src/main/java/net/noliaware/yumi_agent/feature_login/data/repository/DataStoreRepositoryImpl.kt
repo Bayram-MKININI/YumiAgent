@@ -9,11 +9,12 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
-import net.noliaware.yumi_agent.commun.DEVICE_ID
-import net.noliaware.yumi_agent.commun.LOGIN
+import net.noliaware.yumi_agent.commun.ApiParameters.DEVICE_ID
+import net.noliaware.yumi_agent.commun.ApiParameters.LOGIN
 import net.noliaware.yumi_agent.feature_login.data.repository.DataStoreRepositoryImpl.PreferencesKeys.DEVICE_ID_PREF
 import net.noliaware.yumi_agent.feature_login.data.repository.DataStoreRepositoryImpl.PreferencesKeys.LOGIN_PREF
 import net.noliaware.yumi_agent.feature_login.domain.model.UserPreferences
+import net.noliaware.yumi_agent.feature_login.domain.repository.DataStoreRepository
 import java.io.IOException
 import javax.inject.Inject
 

@@ -2,8 +2,8 @@ package net.noliaware.yumi_agent.feature_auth.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import net.noliaware.yumi_agent.commun.GET_BACK_OFFICE_SIGN_IN_CODE
-import net.noliaware.yumi_agent.commun.SET_PRIVACY_POLICY_READ_STATUS
+import net.noliaware.yumi_agent.commun.ApiConstants.GET_BACK_OFFICE_SIGN_IN_CODE
+import net.noliaware.yumi_agent.commun.ApiConstants.SET_PRIVACY_POLICY_READ_STATUS
 import net.noliaware.yumi_agent.commun.data.remote.RemoteApi
 import net.noliaware.yumi_agent.commun.domain.model.SessionData
 import net.noliaware.yumi_agent.commun.util.ErrorType
@@ -12,6 +12,7 @@ import net.noliaware.yumi_agent.commun.util.generateToken
 import net.noliaware.yumi_agent.commun.util.getCommonWSParams
 import net.noliaware.yumi_agent.commun.util.handleSessionWithNoFailure
 import net.noliaware.yumi_agent.feature_auth.domain.model.BOSignIn
+import net.noliaware.yumi_agent.feature_auth.domain.repository.AuthRepository
 import okio.IOException
 import retrofit2.HttpException
 import java.util.UUID

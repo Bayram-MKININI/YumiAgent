@@ -2,10 +2,10 @@ package net.noliaware.yumi_agent.feature_alerts.data.repository
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import net.noliaware.yumi_agent.commun.GET_ALERT_LIST
-import net.noliaware.yumi_agent.commun.LIMIT
-import net.noliaware.yumi_agent.commun.LIST_PAGE_SIZE
-import net.noliaware.yumi_agent.commun.TIMESTAMP_OFFSET
+import net.noliaware.yumi_agent.commun.ApiConstants.GET_ALERT_LIST
+import net.noliaware.yumi_agent.commun.ApiParameters.LIMIT
+import net.noliaware.yumi_agent.commun.ApiParameters.LIST_PAGE_SIZE
+import net.noliaware.yumi_agent.commun.ApiParameters.TIMESTAMP_OFFSET
 import net.noliaware.yumi_agent.commun.data.remote.RemoteApi
 import net.noliaware.yumi_agent.commun.domain.model.SessionData
 import net.noliaware.yumi_agent.commun.util.*

@@ -1,11 +1,11 @@
 package net.noliaware.yumi_agent.feature_message.presentation.mappers
 
 import android.content.Context
-import net.noliaware.yumi_agent.commun.DATE_TIME_SOURCE_FORMAT
-import net.noliaware.yumi_agent.commun.DAY_OF_MONTH_NUMERICAL_DATE_FORMAT
-import net.noliaware.yumi_agent.commun.HOURS_TIME_FORMAT
-import net.noliaware.yumi_agent.commun.NUMERICAL_DATE_FORMAT
-import net.noliaware.yumi_agent.commun.SINGLE_DAY_DATE_FORMAT
+import net.noliaware.yumi_agent.commun.DateTime.DATE_TIME_SOURCE_FORMAT
+import net.noliaware.yumi_agent.commun.DateTime.DAY_OF_MONTH_NUMERICAL_DATE_FORMAT
+import net.noliaware.yumi_agent.commun.DateTime.HOURS_TIME_FORMAT
+import net.noliaware.yumi_agent.commun.DateTime.NUMERICAL_DATE_FORMAT
+import net.noliaware.yumi_agent.commun.DateTime.SINGLE_DAY_DATE_FORMAT
 import net.noliaware.yumi_agent.commun.presentation.mappers.PriorityMapper
 import net.noliaware.yumi_agent.commun.util.parseDateToFormat
 import net.noliaware.yumi_agent.commun.util.parseTimeToFormat

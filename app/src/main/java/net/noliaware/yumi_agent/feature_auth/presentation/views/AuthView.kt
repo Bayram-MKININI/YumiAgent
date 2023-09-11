@@ -9,7 +9,7 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import net.noliaware.yumi_agent.R
-import net.noliaware.yumi_agent.commun.GOLDEN_RATIO
+import net.noliaware.yumi_agent.commun.UI.GOLDEN_RATIO
 import net.noliaware.yumi_agent.commun.util.convertDpToPx
 import net.noliaware.yumi_agent.commun.util.getStatusBarHeight
 import net.noliaware.yumi_agent.commun.util.layoutToBottomLeft
@@ -18,7 +18,11 @@ import net.noliaware.yumi_agent.commun.util.measureWrapContent
 import net.noliaware.yumi_agent.commun.util.weak
 import kotlin.math.roundToInt
 
-class AuthView(context: Context, attrs: AttributeSet?) : ViewGroup(context, attrs) {
+class AuthView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : ViewGroup(context, attrs, defStyle) {
 
     private lateinit var headerView: View
     private lateinit var helloTextView: TextView

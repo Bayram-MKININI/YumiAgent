@@ -21,7 +21,11 @@ import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.presentation.views.FillableTextWidget
 import net.noliaware.yumi_agent.commun.util.*
 
-class ReadMailView(context: Context, attrs: AttributeSet?) : ViewGroup(context, attrs) {
+class ReadMailView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : ViewGroup(context, attrs, defStyle) {
 
     private lateinit var backgroundView: View
     private lateinit var headerView: View

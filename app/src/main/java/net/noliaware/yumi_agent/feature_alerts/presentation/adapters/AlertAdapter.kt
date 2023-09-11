@@ -4,8 +4,8 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import net.noliaware.yumi_agent.R
-import net.noliaware.yumi_agent.commun.HOURS_TIME_FORMAT
-import net.noliaware.yumi_agent.commun.LONG_DATE_WITH_DAY_FORMAT
+import net.noliaware.yumi_agent.commun.DateTime.HOURS_TIME_FORMAT
+import net.noliaware.yumi_agent.commun.DateTime.LONG_DATE_WITH_DAY_FORMAT
 import net.noliaware.yumi_agent.commun.presentation.adapters.ItemViewHolder
 import net.noliaware.yumi_agent.commun.presentation.mappers.PriorityMapper
 import net.noliaware.yumi_agent.commun.util.inflate

@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.delay
 import net.noliaware.yumi_agent.commun.presentation.EventsHelper
-import net.noliaware.yumi_agent.feature_auth.data.repository.AuthRepository
+import net.noliaware.yumi_agent.feature_auth.domain.repository.AuthRepository
 import net.noliaware.yumi_agent.feature_auth.domain.model.BOSignIn
 import net.noliaware.yumi_agent.feature_auth.domain.model.TimerState
 import java.time.Duration

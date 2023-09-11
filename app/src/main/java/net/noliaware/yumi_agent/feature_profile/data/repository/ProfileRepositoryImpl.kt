@@ -2,7 +2,7 @@ package net.noliaware.yumi_agent.feature_profile.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import net.noliaware.yumi_agent.commun.GET_ACCOUNT
+import net.noliaware.yumi_agent.commun.ApiConstants.GET_ACCOUNT
 import net.noliaware.yumi_agent.commun.data.remote.RemoteApi
 import net.noliaware.yumi_agent.commun.domain.model.SessionData
 import net.noliaware.yumi_agent.commun.util.ErrorType
@@ -11,6 +11,7 @@ import net.noliaware.yumi_agent.commun.util.generateToken
 import net.noliaware.yumi_agent.commun.util.getCommonWSParams
 import net.noliaware.yumi_agent.commun.util.handleSessionWithNoFailure
 import net.noliaware.yumi_agent.feature_profile.domain.model.UserProfile
+import net.noliaware.yumi_agent.feature_profile.domain.repository.ProfileRepository
 import okio.IOException
 import retrofit2.HttpException
 import java.util.UUID

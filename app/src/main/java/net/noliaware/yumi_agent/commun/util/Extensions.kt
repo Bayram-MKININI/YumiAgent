@@ -35,6 +35,14 @@ import kotlinx.coroutines.flow.FlowCollector
 import net.noliaware.yumi_agent.BuildConfig
 import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.*
+import net.noliaware.yumi_agent.commun.ApiParameters.APP_VERSION
+import net.noliaware.yumi_agent.commun.ApiParameters.DEVICE_ID
+import net.noliaware.yumi_agent.commun.ApiParameters.LOGIN
+import net.noliaware.yumi_agent.commun.ApiParameters.SESSION_ID
+import net.noliaware.yumi_agent.commun.ApiParameters.SESSION_TOKEN
+import net.noliaware.yumi_agent.commun.DateTime.DATE_SOURCE_FORMAT
+import net.noliaware.yumi_agent.commun.DateTime.MINUTES_TIME_FORMAT
+import net.noliaware.yumi_agent.commun.DateTime.TIME_SOURCE_FORMAT
 import net.noliaware.yumi_agent.commun.data.remote.dto.AppMessageDTO
 import net.noliaware.yumi_agent.commun.data.remote.dto.ErrorDTO
 import net.noliaware.yumi_agent.commun.data.remote.dto.SessionDTO

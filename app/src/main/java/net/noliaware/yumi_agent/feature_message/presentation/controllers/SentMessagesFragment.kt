@@ -11,7 +11,7 @@ import androidx.paging.LoadState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import net.noliaware.yumi_agent.R
-import net.noliaware.yumi_agent.commun.READ_MESSAGE_FRAGMENT_TAG
+import net.noliaware.yumi_agent.commun.FragmentTags.READ_MESSAGE_FRAGMENT_TAG
 import net.noliaware.yumi_agent.commun.presentation.adapters.ListLoadStateAdapter
 import net.noliaware.yumi_agent.commun.util.handlePaginationError
 import net.noliaware.yumi_agent.feature_message.presentation.adapters.MessageAdapter

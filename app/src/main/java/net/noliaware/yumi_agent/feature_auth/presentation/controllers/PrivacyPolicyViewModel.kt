@@ -6,10 +6,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import net.noliaware.yumi_agent.commun.PRIVACY_POLICY_CONFIRMATION_REQUIRED
-import net.noliaware.yumi_agent.commun.PRIVACY_POLICY_URL
+import net.noliaware.yumi_agent.commun.Args.PRIVACY_POLICY_CONFIRMATION_REQUIRED
+import net.noliaware.yumi_agent.commun.Args.PRIVACY_POLICY_URL
 import net.noliaware.yumi_agent.commun.presentation.EventsHelper
-import net.noliaware.yumi_agent.feature_auth.data.repository.AuthRepository
+import net.noliaware.yumi_agent.feature_auth.domain.repository.AuthRepository
 import javax.inject.Inject
 
 @HiltViewModel

@@ -2,10 +2,10 @@ package net.noliaware.yumi_agent.feature_message.data.repository
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import net.noliaware.yumi_agent.commun.GET_INBOX_MESSAGE_LIST
-import net.noliaware.yumi_agent.commun.LIMIT
-import net.noliaware.yumi_agent.commun.LIST_PAGE_SIZE
-import net.noliaware.yumi_agent.commun.OFFSET
+import net.noliaware.yumi_agent.commun.ApiConstants.GET_INBOX_MESSAGE_LIST
+import net.noliaware.yumi_agent.commun.ApiParameters.LIMIT
+import net.noliaware.yumi_agent.commun.ApiParameters.LIST_PAGE_SIZE
+import net.noliaware.yumi_agent.commun.ApiParameters.OFFSET
 import net.noliaware.yumi_agent.commun.data.remote.RemoteApi
 import net.noliaware.yumi_agent.commun.domain.model.SessionData
 import net.noliaware.yumi_agent.commun.util.*

@@ -10,8 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import net.noliaware.yumi_agent.R
-import net.noliaware.yumi_agent.commun.ACCOUNT_DATA
-import net.noliaware.yumi_agent.commun.PRIVACY_POLICY_FRAGMENT_TAG
+import net.noliaware.yumi_agent.commun.Args.ACCOUNT_DATA
+import net.noliaware.yumi_agent.commun.FragmentTags.PRIVACY_POLICY_FRAGMENT_TAG
 import net.noliaware.yumi_agent.commun.util.ViewModelState
 import net.noliaware.yumi_agent.commun.util.formatNumber
 import net.noliaware.yumi_agent.commun.util.handleSharedEvent

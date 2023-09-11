@@ -1,6 +1,22 @@
 package net.noliaware.yumi_agent.commun.data.remote
 
 import net.noliaware.yumi_agent.commun.*
+import net.noliaware.yumi_agent.commun.ApiConstants.CONNECT
+import net.noliaware.yumi_agent.commun.ApiConstants.DELETE_INBOX_MESSAGE
+import net.noliaware.yumi_agent.commun.ApiConstants.DELETE_OUTBOX_MESSAGE
+import net.noliaware.yumi_agent.commun.ApiConstants.GET_ACCOUNT
+import net.noliaware.yumi_agent.commun.ApiConstants.GET_ALERT_LIST
+import net.noliaware.yumi_agent.commun.ApiConstants.GET_BACK_OFFICE_SIGN_IN_CODE
+import net.noliaware.yumi_agent.commun.ApiConstants.GET_INBOX_MESSAGE
+import net.noliaware.yumi_agent.commun.ApiConstants.GET_INBOX_MESSAGE_LIST
+import net.noliaware.yumi_agent.commun.ApiConstants.GET_OUTBOX_MESSAGE
+import net.noliaware.yumi_agent.commun.ApiConstants.GET_OUTBOX_MESSAGE_LIST
+import net.noliaware.yumi_agent.commun.ApiConstants.INIT
+import net.noliaware.yumi_agent.commun.ApiConstants.SEND_MESSAGE
+import net.noliaware.yumi_agent.commun.ApiConstants.SET_PRIVACY_POLICY_READ_STATUS
+import net.noliaware.yumi_agent.commun.ApiParameters.SALT_STRING
+import net.noliaware.yumi_agent.commun.ApiParameters.TIMESTAMP
+import net.noliaware.yumi_agent.commun.ApiParameters.TOKEN
 import net.noliaware.yumi_agent.commun.data.remote.dto.ResponseDTO
 import net.noliaware.yumi_agent.feature_alerts.data.remote.dto.AlertsDTO
 import net.noliaware.yumi_agent.feature_auth.data.repository.dto.BOSignInDTO

@@ -15,7 +15,11 @@ import net.noliaware.yumi_agent.commun.util.layoutToTopLeft
 import net.noliaware.yumi_agent.commun.util.measureWrapContent
 import net.noliaware.yumi_agent.commun.util.weak
 
-class PasswordView(context: Context, attrs: AttributeSet?) : ElevatedCardView(context, attrs) {
+class PasswordView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : ElevatedCardView(context, attrs, defStyle) {
 
     private lateinit var inputCodeTextView: TextView
     private lateinit var descriptionTextView: TextView

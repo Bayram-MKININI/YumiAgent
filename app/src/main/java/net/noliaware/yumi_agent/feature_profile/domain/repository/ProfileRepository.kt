@@ -1,4 +1,4 @@
-package net.noliaware.yumi_agent.feature_profile.data.repository
+package net.noliaware.yumi_agent.feature_profile.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 import net.noliaware.yumi_agent.commun.util.Resource
