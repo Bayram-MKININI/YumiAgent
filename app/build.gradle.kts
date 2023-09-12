@@ -16,8 +16,8 @@ android {
         applicationId = "net.noliaware.yumi_agent"
         minSdk = 21
         targetSdk = 34
-        versionCode = 9
-        versionName = "1.0.1"
+        versionCode = 10
+        versionName = "1.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
