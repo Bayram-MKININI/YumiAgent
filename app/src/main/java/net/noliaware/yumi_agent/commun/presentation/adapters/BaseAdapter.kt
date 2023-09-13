@@ -4,7 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class BaseAdapter<T>(private val listOfItems: List<T>) : RecyclerView.Adapter<BaseViewHolder<T>>() {
+class BaseAdapter<T>(private val dataSet: List<T>) : RecyclerView.Adapter<BaseViewHolder<T>>() {
 
     var expressionViewHolderBinding: ((T, View) -> Unit)? = null
     var expressionOnCreateViewHolder: ((ViewGroup) -> View)? = null
@@ -22,7 +22,7 @@ class BaseAdapter<T>(private val listOfItems: List<T>) : RecyclerView.Adapter<Ba
                 expression = expressionViewHolderBinding,
                 onItemClicked = onItemClicked?.let {
                     { position ->
-                        listOfItems[position]?.let {
+                        dataSet[position]?.let {
                             onItemClicked?.invoke(position)
                         }
                     }
@@ -32,10 +32,10 @@ class BaseAdapter<T>(private val listOfItems: List<T>) : RecyclerView.Adapter<Ba
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int) {
-        holder.bind(listOfItems[position])
+        holder.bind(dataSet[position])
     }
 
     override fun getItemCount(): Int {
-        return listOfItems.size
+        return dataSet.size
     }
 }
