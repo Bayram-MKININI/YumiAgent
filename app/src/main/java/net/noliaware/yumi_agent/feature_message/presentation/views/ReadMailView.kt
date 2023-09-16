@@ -15,11 +15,18 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
-import com.facebook.shimmer.Shimmer
 import com.facebook.shimmer.ShimmerFrameLayout
 import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.presentation.views.FillableTextWidget
-import net.noliaware.yumi_agent.commun.util.*
+import net.noliaware.yumi_agent.commun.util.activateShimmer
+import net.noliaware.yumi_agent.commun.util.convertDpToPx
+import net.noliaware.yumi_agent.commun.util.getColorCompat
+import net.noliaware.yumi_agent.commun.util.getStatusBarHeight
+import net.noliaware.yumi_agent.commun.util.layoutToBottomLeft
+import net.noliaware.yumi_agent.commun.util.layoutToTopLeft
+import net.noliaware.yumi_agent.commun.util.layoutToTopRight
+import net.noliaware.yumi_agent.commun.util.measureWrapContent
+import net.noliaware.yumi_agent.commun.util.weak
 
 class ReadMailView @JvmOverloads constructor(
     context: Context,
@@ -134,18 +141,8 @@ class ReadMailView @JvmOverloads constructor(
         composeButton.isVisible = readMailViewAdapter.replyPossible
     }
 
-    fun setLoadingVisible(visible: Boolean) {
-        shimmerView.setShimmer(
-            Shimmer.AlphaHighlightBuilder()
-                .setBaseAlpha(if (visible) 0.4f else 1f)
-                .setDuration(resources.getInteger(R.integer.shimmer_animation_duration_ms).toLong())
-                .build()
-        )
-        if (visible) {
-            shimmerView.startShimmer()
-        } else {
-            shimmerView.stopShimmer()
-        }
+    fun activateLoading(visible: Boolean) {
+        shimmerView.activateShimmer(visible)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

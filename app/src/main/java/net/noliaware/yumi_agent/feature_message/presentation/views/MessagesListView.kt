@@ -12,6 +12,7 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.presentation.adapters.BaseAdapter
 import net.noliaware.yumi_agent.commun.util.MarginItemDecoration
+import net.noliaware.yumi_agent.commun.util.activateShimmer
 import net.noliaware.yumi_agent.commun.util.convertDpToPx
 import net.noliaware.yumi_agent.commun.util.inflate
 import net.noliaware.yumi_agent.commun.util.layoutToTopLeft
@@ -64,12 +65,17 @@ class MessagesListView @JvmOverloads constructor(
     }
 
     fun setLoadingVisible(visible: Boolean) {
+        shimmerView.activateShimmer(visible)
         if (visible) {
             shimmerView.isVisible = true
-            shimmerView.startShimmer()
         } else {
             shimmerView.isGone = true
-            shimmerView.stopShimmer()
+        }
+    }
+
+    fun stopLoading() {
+        if (shimmerView.isVisible) {
+            shimmerView.activateShimmer(false)
         }
     }
 

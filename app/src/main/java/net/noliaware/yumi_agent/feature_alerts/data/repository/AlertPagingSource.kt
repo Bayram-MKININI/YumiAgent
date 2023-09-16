@@ -38,7 +38,7 @@ class AlertPagingSource(
                 params = generateGetAlertsListParams(nextTimestamp, GET_ALERT_LIST)
             )
 
-            val errorType = handlePaginatedListErrorIfAny(
+            val errorType = resolvePaginatedListErrorIfAny(
                 session = remoteData.session,
                 sessionData = sessionData,
                 tokenKey = GET_ALERT_LIST
@@ -62,8 +62,8 @@ class AlertPagingSource(
                 prevKey = null,// Only paging forward.
                 nextKey = if (canLoadMore) alertTimestamp else null
             )
-        } catch (e: Exception) {
-            return LoadResult.Error(e)
+        } catch (ex: Exception) {
+            return handlePagingSourceError(ex)
         }
     }
 

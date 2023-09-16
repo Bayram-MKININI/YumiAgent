@@ -13,6 +13,7 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.presentation.adapters.BaseAdapter
 import net.noliaware.yumi_agent.commun.util.MarginItemDecoration
+import net.noliaware.yumi_agent.commun.util.activateShimmer
 import net.noliaware.yumi_agent.commun.util.convertDpToPx
 import net.noliaware.yumi_agent.commun.util.getStatusBarHeight
 import net.noliaware.yumi_agent.commun.util.inflate
@@ -47,7 +48,6 @@ class AlertsView @JvmOverloads constructor(
     }
 
     private fun initView() {
-
         headerView = findViewById(R.id.header_view)
         titleTextView = findViewById(R.id.title_text_view)
         notificationIconView = findViewById(R.id.notification_icon_view)
@@ -75,12 +75,17 @@ class AlertsView @JvmOverloads constructor(
     }
 
     fun setLoadingVisible(visible: Boolean) {
+        shimmerView.activateShimmer(visible)
         if (visible) {
             shimmerView.isVisible = true
-            shimmerView.startShimmer()
         } else {
             shimmerView.isGone = true
-            shimmerView.stopShimmer()
+        }
+    }
+
+    fun stopLoading() {
+        if (shimmerView.isVisible) {
+            shimmerView.activateShimmer(false)
         }
     }
 
@@ -115,7 +120,7 @@ class AlertsView @JvmOverloads constructor(
         val contentViewWidth = viewWidth * 95 / 100
         val sideMargin = viewWidth * 5 / 100 / 2
         val contentViewHeight = viewHeight - (headerView.measuredHeight + notificationIconView.measuredHeight / 2
-                + sideMargin + convertDpToPx(35))
+                    + sideMargin + convertDpToPx(35))
 
         contentView.measure(
             MeasureSpec.makeMeasureSpec(contentViewWidth, MeasureSpec.EXACTLY),

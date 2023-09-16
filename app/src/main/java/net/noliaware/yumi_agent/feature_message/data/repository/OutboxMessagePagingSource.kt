@@ -8,9 +8,14 @@ import net.noliaware.yumi_agent.commun.ApiParameters.LIST_PAGE_SIZE
 import net.noliaware.yumi_agent.commun.ApiParameters.OFFSET
 import net.noliaware.yumi_agent.commun.data.remote.RemoteApi
 import net.noliaware.yumi_agent.commun.domain.model.SessionData
-import net.noliaware.yumi_agent.commun.util.*
+import net.noliaware.yumi_agent.commun.util.ErrorType
+import net.noliaware.yumi_agent.commun.util.PaginationException
+import net.noliaware.yumi_agent.commun.util.generateToken
+import net.noliaware.yumi_agent.commun.util.getCommonWSParams
+import net.noliaware.yumi_agent.commun.util.handlePagingSourceError
+import net.noliaware.yumi_agent.commun.util.resolvePaginatedListErrorIfAny
 import net.noliaware.yumi_agent.feature_message.domain.model.Message
-import java.util.*
+import java.util.UUID
 
 class OutboxMessagePagingSource(
     private val api: RemoteApi,
@@ -43,7 +48,7 @@ class OutboxMessagePagingSource(
                 params = generateGetMessagesListParams(nextPage, GET_OUTBOX_MESSAGE_LIST)
             )
 
-            val errorType = handlePaginatedListErrorIfAny(
+            val errorType = resolvePaginatedListErrorIfAny(
                 session = remoteData.session,
                 sessionData = sessionData,
                 tokenKey = GET_OUTBOX_MESSAGE_LIST
@@ -70,8 +75,8 @@ class OutboxMessagePagingSource(
                 prevKey = null,// Only paging forward.
                 nextKey = if (canLoadMore) messageRank else null
             )
-        } catch (e: Exception) {
-            return LoadResult.Error(e)
+        } catch (ex: Exception) {
+            return handlePagingSourceError(ex)
         }
     }
 
