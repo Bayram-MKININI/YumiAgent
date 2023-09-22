@@ -42,16 +42,7 @@ object ApiParameters {
     const val MESSAGE_PRIORITY = "messagePriority"
     const val MESSAGE_SUBJECT = "messageSubject"
     const val MESSAGE_BODY = "messageBody"
-    const val MESSAGE = "message"
     const val TIMESTAMP_OFFSET = "timestampOffset"
-}
-
-object Args {
-    const val ACCOUNT_DATA = "account_data"
-    const val PRIVACY_POLICY_URL = "privacy_policy_url"
-    const val PRIVACY_POLICY_CONFIRMATION_REQUIRED = "privacy_policy_confirmation_required"
-    const val DOMAIN_NAME = "domain_name"
-    const val DATA_SHOULD_REFRESH = "dataShouldRefresh"
 }
 
 object Push {
@@ -79,11 +70,9 @@ object RemoteConfig {
     const val KEY_FORCE_UPDATE_URL = "android_force_update_store_url"
 }
 
-object FragmentTags {
-    const val PRIVACY_POLICY_FRAGMENT_TAG = "privacy_policy_fragment"
-    const val BO_SIGN_IN_FRAGMENT_TAG = "bo_sign_in_fragment"
-    const val READ_MESSAGE_FRAGMENT_TAG = "read_message_fragment"
-    const val SEND_MESSAGES_FRAGMENT_TAG = "send_messages_fragment"
+object FragmentKeys {
+    const val REFRESH_RECEIVED_MESSAGES_REQUEST_KEY = "refresh_received_message_request_key"
+    const val REFRESH_SENT_MESSAGES_REQUEST_KEY = "refresh_sent_message_request_key"
 }
 
 object UI {

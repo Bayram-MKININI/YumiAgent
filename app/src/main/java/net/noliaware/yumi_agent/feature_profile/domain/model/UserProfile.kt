@@ -1,7 +1,9 @@
 package net.noliaware.yumi_agent.feature_profile.domain.model
 
-import java.io.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class UserProfile(
     val login: String?,
     val firstName: String,
@@ -16,4 +18,4 @@ data class UserProfile(
     val partnerCount: Int,
     val contributorCount: Int,
     val messageBoxUsagePercentage: Int
-) : Serializable
+) : Parcelable

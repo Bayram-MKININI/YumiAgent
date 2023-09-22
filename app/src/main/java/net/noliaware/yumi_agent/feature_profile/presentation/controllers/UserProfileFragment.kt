@@ -7,18 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import net.noliaware.yumi_agent.R
-import net.noliaware.yumi_agent.commun.Args.ACCOUNT_DATA
-import net.noliaware.yumi_agent.commun.FragmentTags.PRIVACY_POLICY_FRAGMENT_TAG
 import net.noliaware.yumi_agent.commun.util.ViewModelState
 import net.noliaware.yumi_agent.commun.util.formatNumber
 import net.noliaware.yumi_agent.commun.util.handleSharedEvent
 import net.noliaware.yumi_agent.commun.util.redirectToLoginScreenFromSharedEvent
-import net.noliaware.yumi_agent.commun.util.withArgs
-import net.noliaware.yumi_agent.feature_auth.presentation.controllers.PrivacyPolicyFragment
-import net.noliaware.yumi_agent.feature_login.domain.model.AccountData
 import net.noliaware.yumi_agent.feature_profile.domain.model.UserProfile
 import net.noliaware.yumi_agent.feature_profile.presentation.views.ProfileParentView
 import net.noliaware.yumi_agent.feature_profile.presentation.views.ProfileView
@@ -27,13 +24,8 @@ import net.noliaware.yumi_agent.feature_profile.presentation.views.ProfileView.P
 @AndroidEntryPoint
 class UserProfileFragment : Fragment() {
 
-    companion object {
-        fun newInstance(
-            accountData: AccountData?
-        ) = UserProfileFragment().withArgs(ACCOUNT_DATA to accountData)
-    }
-
     private var profileDataParentView: ProfileParentView? = null
+    private val args: UserProfileFragmentArgs by navArgs()
     private val viewModel by viewModels<UserProfileFragmentViewModel>()
 
     override fun onCreateView(
@@ -108,12 +100,11 @@ class UserProfileFragment : Fragment() {
 
     private val profileViewCallback: ProfileView.ProfileViewCallback by lazy {
         ProfileView.ProfileViewCallback {
-            PrivacyPolicyFragment.newInstance(
-                privacyPolicyUrl = viewModel.accountData?.privacyPolicyUrl.orEmpty(),
-                isConfirmationRequired = false
-            ).show(
-                childFragmentManager.beginTransaction(),
-                PRIVACY_POLICY_FRAGMENT_TAG
+            findNavController().navigate(
+                UserProfileFragmentDirections.actionUserProfileFragmentToPrivacyPolicyFragment(
+                    privacyPolicyUrl = args.accountData.privacyPolicyUrl,
+                    isPrivacyPolicyConfirmationRequired = false
+                )
             )
         }
     }

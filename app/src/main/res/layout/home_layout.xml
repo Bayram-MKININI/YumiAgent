@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <net.noliaware.yumi_agent.feature_auth.presentation.views.HomeView
+<net.noliaware.yumi_agent.feature_auth.presentation.views.HomeView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -15,7 +15,8 @@
         android:src="@drawable/ic_view_background" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/main_fragment_container"
+        android:id="@+id/home_nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

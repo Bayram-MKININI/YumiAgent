@@ -1,27 +1,27 @@
 package net.noliaware.yumi_agent.feature_message.presentation.controllers
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import net.noliaware.yumi_agent.R
-import net.noliaware.yumi_agent.commun.ApiParameters.MESSAGE
-import net.noliaware.yumi_agent.commun.Args.DOMAIN_NAME
+import net.noliaware.yumi_agent.commun.FragmentKeys.REFRESH_SENT_MESSAGES_REQUEST_KEY
 import net.noliaware.yumi_agent.commun.domain.model.Priority
 import net.noliaware.yumi_agent.commun.presentation.mappers.PriorityMapper
 import net.noliaware.yumi_agent.commun.util.ViewModelState
 import net.noliaware.yumi_agent.commun.util.handleSharedEvent
+import net.noliaware.yumi_agent.commun.util.navDismiss
 import net.noliaware.yumi_agent.commun.util.redirectToLoginScreenFromSharedEvent
-import net.noliaware.yumi_agent.commun.util.withArgs
-import net.noliaware.yumi_agent.feature_message.domain.model.Message
 import net.noliaware.yumi_agent.feature_message.presentation.adapters.MessagePriorityAdapter
 import net.noliaware.yumi_agent.feature_message.presentation.views.PriorityUI
 import net.noliaware.yumi_agent.feature_message.presentation.views.SendMailView
@@ -30,19 +30,9 @@ import net.noliaware.yumi_agent.feature_message.presentation.views.SendMailView.
 @AndroidEntryPoint
 class SendMailFragment : AppCompatDialogFragment() {
 
-    companion object {
-        fun newInstance(
-            message: Message? = null,
-            domainName: String? = null
-        ) = SendMailFragment().withArgs(
-            MESSAGE to message,
-            DOMAIN_NAME to domainName
-        )
-    }
-
     private var sendMailView: SendMailView? = null
+    private val args: SendMailFragmentArgs by navArgs()
     private val viewModel by viewModels<SendMailFragmentViewModel>()
-    var onMessageSent: (() -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,7 +73,7 @@ class SendMailFragment : AppCompatDialogFragment() {
     }
 
     private fun setUpDefaultValuesIfAny() {
-        viewModel.message?.let { selectedMessage ->
+        args.message?.let { selectedMessage ->
             selectedMessage.messageSender?.let { messageSender ->
                 sendMailView?.setRecipientFixed(messageSender)
             }
@@ -91,7 +81,7 @@ class SendMailFragment : AppCompatDialogFragment() {
             sendMailView?.setPriorityFixed(PriorityMapper().mapPriorityIcon(selectedMessage.messagePriority))
         }
 
-        viewModel.domainName?.let { domainName ->
+        args.domainName?.let { domainName ->
             sendMailView?.setMailDomain(domainName)
         }
     }
@@ -109,7 +99,11 @@ class SendMailFragment : AppCompatDialogFragment() {
                     is ViewModelState.LoadingState -> Unit
                     is ViewModelState.DataState -> vmState.data?.let { result ->
                         if (result) {
-                            dismiss()
+                            setFragmentResult(
+                                REFRESH_SENT_MESSAGES_REQUEST_KEY,
+                                bundleOf()
+                            )
+                            navDismiss()
                         }
                     }
                 }
@@ -120,7 +114,7 @@ class SendMailFragment : AppCompatDialogFragment() {
     private val sendMailViewCallback: SendMailViewCallback by lazy {
         object : SendMailViewCallback {
             override fun onBackButtonClicked() {
-                dismissAllowingStateLoss()
+                navDismiss()
             }
 
             override fun onClearButtonClicked() {
@@ -135,7 +129,7 @@ class SendMailFragment : AppCompatDialogFragment() {
                 val selectedPriorityIndex = sendMailView?.getSelectedPriorityIndex() ?: 0
                 val priority = Priority.values()[selectedPriorityIndex].value
 
-                if (viewModel.message != null) {
+                if (args.message != null) {
                     sendMailReply(text)
                 } else {
                     sendNewMail(recipients, subject, priority, text)
@@ -146,7 +140,7 @@ class SendMailFragment : AppCompatDialogFragment() {
 
     private fun sendMailReply(text: String) {
         viewModel.callSendMessage(
-            messageId = viewModel.message?.messageId,
+            messageId = args.message?.messageId,
             messageBody = text
         )
     }
@@ -181,17 +175,8 @@ class SendMailFragment : AppCompatDialogFragment() {
         sendMailView?.computeMailView()
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        viewModel.messageSentEventsHelper.stateData?.let { messageSent ->
-            if (messageSent) {
-                onMessageSent?.invoke()
-            }
-        }
-    }
-
     override fun onDestroyView() {
-        super.onDestroyView()
         sendMailView = null
+        super.onDestroyView()
     }
 }

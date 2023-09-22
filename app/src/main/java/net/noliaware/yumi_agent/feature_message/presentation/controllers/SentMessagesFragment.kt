@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import net.noliaware.yumi_agent.R
-import net.noliaware.yumi_agent.commun.FragmentTags.READ_MESSAGE_FRAGMENT_TAG
 import net.noliaware.yumi_agent.commun.presentation.adapters.ListLoadStateAdapter
 import net.noliaware.yumi_agent.commun.util.handlePaginationError
 import net.noliaware.yumi_agent.feature_message.presentation.adapters.MessageAdapter
@@ -22,7 +22,11 @@ import net.noliaware.yumi_agent.feature_message.presentation.views.MessagesListV
 class SentMessagesFragment : Fragment() {
 
     private var messagesListView: MessagesListView? = null
-    private val viewModel by viewModels<SentMessagesFragmentViewModel>()
+    private val viewModel by viewModels<MessagingFragmentViewModel>(
+        ownerProducer = {
+            requireParentFragment()
+        }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,15 +36,10 @@ class SentMessagesFragment : Fragment() {
         return inflater.inflate(R.layout.messages_list_layout, container, false).apply {
             messagesListView = this as MessagesListView
             messagesListView?.messageAdapter = MessageAdapter(SentMessageMapper()) { message ->
-                ReadOutboxMailFragment.newInstance(
-                    message.messageId
-                ).apply {
-                    onSentMessageListRefreshed = {
-                        refreshAdapter()
-                    }
-                }.show(
-                    childFragmentManager.beginTransaction(),
-                    READ_MESSAGE_FRAGMENT_TAG
+                findNavController().navigate(
+                    MessagingFragmentDirections.actionMessagingFragmentToReadOutboxMailFragment(
+                        message.messageId
+                    )
                 )
             }
         }
@@ -53,6 +52,11 @@ class SentMessagesFragment : Fragment() {
     }
 
     private fun collectFlows() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.onSentListRefreshedEventFlow.collectLatest {
+                messagesListView?.messageAdapter?.refresh()
+            }
+        }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             messagesListView?.messageAdapter?.loadStateFlow?.collectLatest { loadState ->
 
@@ -69,17 +73,13 @@ class SentMessagesFragment : Fragment() {
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.getMessages().collectLatest {
+            viewModel.getSentMessages().collectLatest {
                 messagesListView?.messageAdapter?.withLoadStateFooter(
                     footer = ListLoadStateAdapter()
                 )
                 messagesListView?.messageAdapter?.submitData(it)
             }
         }
-    }
-
-    fun refreshAdapter() {
-        messagesListView?.messageAdapter?.refresh()
     }
 
     override fun onDestroyView() {

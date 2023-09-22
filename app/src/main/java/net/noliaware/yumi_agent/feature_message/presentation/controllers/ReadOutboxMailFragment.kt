@@ -1,29 +1,30 @@
 package net.noliaware.yumi_agent.feature_message.presentation.controllers
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import net.noliaware.yumi_agent.R
-import net.noliaware.yumi_agent.commun.ApiParameters.MESSAGE_ID
 import net.noliaware.yumi_agent.commun.DateTime.HOURS_TIME_FORMAT
 import net.noliaware.yumi_agent.commun.DateTime.LONG_DATE_WITH_DAY_FORMAT
+import net.noliaware.yumi_agent.commun.FragmentKeys.REFRESH_SENT_MESSAGES_REQUEST_KEY
 import net.noliaware.yumi_agent.commun.presentation.mappers.PriorityMapper
 import net.noliaware.yumi_agent.commun.util.ViewModelState
 import net.noliaware.yumi_agent.commun.util.handleSharedEvent
+import net.noliaware.yumi_agent.commun.util.navDismiss
 import net.noliaware.yumi_agent.commun.util.parseDateToFormat
 import net.noliaware.yumi_agent.commun.util.parseTimeToFormat
 import net.noliaware.yumi_agent.commun.util.redirectToLoginScreenFromSharedEvent
-import net.noliaware.yumi_agent.commun.util.withArgs
 import net.noliaware.yumi_agent.feature_message.domain.model.Message
 import net.noliaware.yumi_agent.feature_message.presentation.views.ReadMailView
 import net.noliaware.yumi_agent.feature_message.presentation.views.ReadMailView.ReadMailViewAdapter
@@ -32,15 +33,8 @@ import net.noliaware.yumi_agent.feature_message.presentation.views.ReadMailView.
 @AndroidEntryPoint
 class ReadOutboxMailFragment : AppCompatDialogFragment() {
 
-    companion object {
-        fun newInstance(
-            messageId: String
-        ) = ReadOutboxMailFragment().withArgs(MESSAGE_ID to messageId)
-    }
-
     private var readMailView: ReadMailView? = null
     private val viewModel by viewModels<ReadOutboxMailFragmentViewModel>()
-    var onSentMessageListRefreshed: (() -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +55,7 @@ class ReadOutboxMailFragment : AppCompatDialogFragment() {
     private val readMailViewCallback: ReadMailViewCallback by lazy {
         object : ReadMailViewCallback {
             override fun onBackButtonClicked() {
-                dismissAllowingStateLoss()
+                navDismiss()
             }
 
             override fun onDeleteButtonClicked() {
@@ -113,8 +107,11 @@ class ReadOutboxMailFragment : AppCompatDialogFragment() {
                     is ViewModelState.LoadingState -> Unit
                     is ViewModelState.DataState -> vmState.data?.let { result ->
                         if (result) {
-                            viewModel.sentMessageListShouldRefresh = true
-                            dismissAllowingStateLoss()
+                            setFragmentResult(
+                                REFRESH_SENT_MESSAGES_REQUEST_KEY,
+                                bundleOf()
+                            )
+                            navDismiss()
                         }
                     }
                 }
@@ -145,15 +142,8 @@ class ReadOutboxMailFragment : AppCompatDialogFragment() {
         }
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        if (viewModel.sentMessageListShouldRefresh == true) {
-            onSentMessageListRefreshed?.invoke()
-        }
-    }
-
     override fun onDestroyView() {
-        super.onDestroyView()
         readMailView = null
+        super.onDestroyView()
     }
 }

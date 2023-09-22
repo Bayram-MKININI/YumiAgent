@@ -5,17 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import net.noliaware.yumi_agent.R
-import net.noliaware.yumi_agent.commun.Args.ACCOUNT_DATA
 import net.noliaware.yumi_agent.commun.DateTime.DAY_OF_MONTH_TEXT_DATE_FORMAT
 import net.noliaware.yumi_agent.commun.DateTime.HOURS_TIME_FORMAT
-import net.noliaware.yumi_agent.commun.FragmentTags.BO_SIGN_IN_FRAGMENT_TAG
-import net.noliaware.yumi_agent.commun.util.inflate
 import net.noliaware.yumi_agent.commun.util.parseTimestampToDate
-import net.noliaware.yumi_agent.commun.util.withArgs
 import net.noliaware.yumi_agent.feature_auth.presentation.views.AuthView
+import net.noliaware.yumi_agent.feature_auth.presentation.views.AuthView.AuthViewAdapter
 import net.noliaware.yumi_agent.feature_auth.presentation.views.AuthView.AuthViewCallback
 import net.noliaware.yumi_agent.feature_login.domain.model.AccountData
 import net.noliaware.yumi_agent.feature_login.domain.model.TFAMode
@@ -23,21 +21,15 @@ import net.noliaware.yumi_agent.feature_login.domain.model.TFAMode
 @AndroidEntryPoint
 class AuthFragment : Fragment() {
 
-    companion object {
-        fun newInstance(
-            accountData: AccountData?
-        ) = AuthFragment().withArgs(ACCOUNT_DATA to accountData)
-    }
-
     private var authView: AuthView? = null
-    private val viewModel by viewModels<HomeFragmentViewModel>()
+    private val args: AuthFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return container?.inflate(R.layout.auth_layout)?.apply {
+        return inflater.inflate(R.layout.auth_layout, container, false).apply {
             authView = this as AuthView
             authView?.callback = authViewCallback
         }
@@ -45,9 +37,7 @@ class AuthFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.accountData?.let { accountData ->
-            bindViewToData(accountData)
-        }
+        bindViewToData(args.accountData)
     }
 
     private fun bindViewToData(accountData: AccountData) {
@@ -66,7 +56,7 @@ class AuthFragment : Fragment() {
             }
         )
 
-        AuthView.AuthViewAdapter(
+        AuthViewAdapter(
             twoFactorAuthModeText = map2FAModeText(accountData.twoFactorAuthMode),
             twoFactorAuthModeActivated = map2FAModeActivation(accountData.twoFactorAuthMode),
         ).also {
@@ -75,7 +65,7 @@ class AuthFragment : Fragment() {
     }
 
     private fun map2FAModeText(
-        twoFactorAuthMode: TFAMode?
+        twoFactorAuthMode: TFAMode
     ) = when (twoFactorAuthMode) {
         TFAMode.APP -> getString(R.string.bo_two_factor_auth_by_app)
         TFAMode.MAIL -> getString(R.string.bo_two_factor_auth_by_mail)
@@ -83,7 +73,7 @@ class AuthFragment : Fragment() {
     }
 
     private fun map2FAModeActivation(
-        twoFactorAuthMode: TFAMode?
+        twoFactorAuthMode: TFAMode
     ) = when (twoFactorAuthMode) {
         TFAMode.APP -> true
         else -> false
@@ -91,9 +81,8 @@ class AuthFragment : Fragment() {
 
     private val authViewCallback: AuthViewCallback by lazy {
         AuthViewCallback {
-            BOSignInFragment.newInstance().show(
-                childFragmentManager.beginTransaction(),
-                BO_SIGN_IN_FRAGMENT_TAG
+            findNavController().navigate(
+                AuthFragmentDirections.actionAuthFragmentToBOSignInFragment()
             )
         }
     }
