@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
@@ -16,6 +17,7 @@ import kotlinx.coroutines.time.delay
 import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.feature_auth.presentation.views.HomeMenuView.*
 import net.noliaware.yumi_agent.feature_auth.presentation.views.HomeView
+import net.noliaware.yumi_agent.feature_login.domain.model.AccountData
 import net.noliaware.yumi_agent.feature_message.presentation.controllers.MessagingFragmentArgs
 import net.noliaware.yumi_agent.feature_profile.presentation.controllers.UserProfileFragmentArgs
 import java.time.Duration
@@ -44,30 +46,37 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpBackButtonIntercept()
         homeView?.selectHomeButton()
         homeNavController.setGraph(
             R.navigation.home_nav_graph,
             AuthFragmentArgs(args.accountData).toBundle()
         )
-        args.accountData.let { accountData ->
-            homeView?.homeMenuView?.let { homeMenuView ->
-                if (accountData.newMessageCount > 0) {
-                    homeMenuView.setBadgeForMailButton(accountData.newMessageCount)
-                }
-                if (accountData.newAlertCount > 0) {
-                    homeMenuView.setBadgeForNotificationButton(accountData.newAlertCount)
-                }
+        setUpBadges(args.accountData)
+        showPrivacyPolicyDialogIfAny(args.accountData)
+    }
+
+    private fun setUpBadges(accountData: AccountData) {
+        homeView?.homeMenuView?.let { homeMenuView ->
+            if (accountData.newMessageCount > 0) {
+                homeMenuView.setBadgeForMailButton(accountData.newMessageCount)
             }
-            if (accountData.shouldConfirmPrivacyPolicy) {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    delay(Duration.ofMillis(150))
-                    findNavController().navigate(
-                        HomeFragmentDirections.actionHomeFragmentToPrivacyPolicyFragment(
-                            privacyPolicyUrl = accountData.privacyPolicyUrl,
-                            isPrivacyPolicyConfirmationRequired = true
-                        )
+            if (accountData.newAlertCount > 0) {
+                homeMenuView.setBadgeForNotificationButton(accountData.newAlertCount)
+            }
+        }
+    }
+
+    private fun showPrivacyPolicyDialogIfAny(accountData: AccountData) {
+        if (accountData.shouldConfirmPrivacyPolicy) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(Duration.ofMillis(150))
+                findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentToPrivacyPolicyFragment(
+                        privacyPolicyUrl = accountData.privacyPolicyUrl,
+                        isPrivacyPolicyConfirmationRequired = true
                     )
-                }
+                )
             }
         }
     }
@@ -125,6 +134,19 @@ class HomeFragment : Fragment() {
                 )
             }
         }
+    }
+
+    private fun setUpBackButtonIntercept() {
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    when {
+                        homeNavController.graph.startDestinationId != homeNavController.currentDestination?.id -> homeView?.performClickOnHomeButton()
+                        else -> activity?.finish()
+                    }
+                }
+            })
     }
 
     override fun onDestroyView() {

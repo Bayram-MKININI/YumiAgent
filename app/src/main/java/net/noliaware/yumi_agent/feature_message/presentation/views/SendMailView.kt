@@ -22,6 +22,7 @@ import net.noliaware.yumi_agent.commun.util.layoutToBottomRight
 import net.noliaware.yumi_agent.commun.util.layoutToTopLeft
 import net.noliaware.yumi_agent.commun.util.layoutToTopRight
 import net.noliaware.yumi_agent.commun.util.measureWrapContent
+import net.noliaware.yumi_agent.commun.util.translateYByValue
 import net.noliaware.yumi_agent.commun.util.weak
 import kotlin.math.max
 
@@ -53,7 +54,7 @@ class SendMailView @JvmOverloads constructor(
     private lateinit var messageParentLayout: View
     private lateinit var mailEditText: EditText
     private lateinit var sendButton: View
-    private val visibleRect = Rect()
+    private val visibleBounds = Rect()
     var callback: SendMailViewCallback? by weak()
 
     interface SendMailViewCallback {
@@ -139,9 +140,9 @@ class SendMailView @JvmOverloads constructor(
     }
 
     fun computeMailView() {
-        post {
+        postDelayed({
             mailEditText.requestLayout()
-        }
+        }, 150)
     }
 
     fun clearMail() {
@@ -182,7 +183,7 @@ class SendMailView @JvmOverloads constructor(
 
         titleTextView.measureWrapContent()
 
-        getWindowVisibleDisplayFrame(visibleRect)
+        getWindowVisibleDisplayFrame(visibleBounds)
 
         sendButton.measureWrapContent()
 
@@ -196,10 +197,10 @@ class SendMailView @JvmOverloads constructor(
 
         val messageBackgroundViewHeight = contentView.measuredHeight - (titleTextView.measuredHeight + mailRecipientListView.measuredHeight +
                     sendButton.measuredHeight / 2 +
-                    if (visibleRect.height() == screenHeight) {
+                    if (visibleBounds.height() == screenHeight) {
                         convertDpToPx(50)
                     } else {
-                        contentView.measuredHeight - visibleRect.height() + convertDpToPx(40) + (viewWidth * 5 / 200)
+                        contentView.measuredHeight - visibleBounds.height() + convertDpToPx(40) + (viewWidth * 5 / 200)
                     })
 
         messageBackgroundView.measure(
@@ -267,7 +268,6 @@ class SendMailView @JvmOverloads constructor(
 
         val viewWidth = right - left
         val viewHeight = bottom - top
-        val screenHeight = viewHeight - getStatusBarHeight()
 
         backgroundView.layoutToTopLeft(
             0,
@@ -287,11 +287,7 @@ class SendMailView @JvmOverloads constructor(
         )
 
         val contentSideSpace = (viewWidth - contentView.measuredWidth) / 2
-        val contentViewTop = if (visibleRect.height() == screenHeight) {
-            messageIconView.bottom + convertDpToPx(15)
-        } else {
-            getStatusBarHeight() + contentSideSpace
-        }
+        val contentViewTop = messageIconView.bottom + convertDpToPx(15)
         contentView.layoutToTopLeft(
             contentSideSpace,
             contentViewTop
@@ -355,5 +351,26 @@ class SendMailView @JvmOverloads constructor(
             messageBackgroundView.right,
             messageBackgroundView.bottom + sendButton.measuredHeight / 2
         )
+
+        post {
+            val heightDiff = height - visibleBounds.height()
+            val marginOfError = convertDpToPx(50)
+            val isKeyboardOpen = heightDiff > marginOfError
+
+            if (isKeyboardOpen) {
+                animateLoginTranslationYWithValue(
+                    ((getStatusBarHeight() + contentSideSpace) - contentViewTop).toFloat()
+                )
+            } else {
+                animateLoginTranslationYWithValue(0f)
+            }
+        }
+    }
+
+    private fun animateLoginTranslationYWithValue(translationY: Float) {
+        contentView.translateYByValue(translationY).apply {
+            duration = 100
+            start()
+        }
     }
 }
