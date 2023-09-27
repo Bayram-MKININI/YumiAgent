@@ -63,6 +63,6 @@ class EventsHelper<S> {
                     else -> Unit
                 }
             }
-        }.exhaustive
+        }
     }
 }

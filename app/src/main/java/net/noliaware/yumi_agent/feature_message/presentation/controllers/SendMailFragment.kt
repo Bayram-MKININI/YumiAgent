@@ -22,6 +22,7 @@ import net.noliaware.yumi_agent.commun.util.ViewModelState
 import net.noliaware.yumi_agent.commun.util.handleSharedEvent
 import net.noliaware.yumi_agent.commun.util.navDismiss
 import net.noliaware.yumi_agent.commun.util.redirectToLoginScreenFromSharedEvent
+import net.noliaware.yumi_agent.commun.util.toast
 import net.noliaware.yumi_agent.feature_message.presentation.adapters.MessagePriorityAdapter
 import net.noliaware.yumi_agent.feature_message.presentation.views.PriorityUI
 import net.noliaware.yumi_agent.feature_message.presentation.views.SendMailView
@@ -151,15 +152,13 @@ class SendMailFragment : AppCompatDialogFragment() {
         priority: Int,
         text: String
     ) {
-        if (recipients.isEmpty() || subject.isEmpty() || text.isEmpty()) {
-            when {
-                recipients.isEmpty() -> R.string.recipient_empty_error
-                subject.isEmpty() -> R.string.subject_empty_error
-                text.isEmpty() -> R.string.mail_empty_error
-                else -> null
-            }?.let { messageRes ->
-                Toast.makeText(context, getString(messageRes), Toast.LENGTH_SHORT).show()
-            }
+        when {
+            recipients.isEmpty() -> R.string.recipient_empty_error
+            subject.isEmpty() -> R.string.subject_empty_error
+            text.isEmpty() -> R.string.empty_mail_body_error
+            else -> null
+        }?.let { messageRes ->
+            context.toast(messageRes, Toast.LENGTH_SHORT)
             return
         }
         viewModel.callSendMessage(
