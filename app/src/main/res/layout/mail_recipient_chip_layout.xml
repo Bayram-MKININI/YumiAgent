@@ -8,6 +8,7 @@
     android:layout_height="wrap_content"
     android:fontFamily="@font/omnes_medium"
     android:textSize="16sp"
-    app:chipBackgroundColor="@color/grey_5"
+    app:chipStrokeColor="@color/grey_5"
+    app:chipStrokeWidth="1dp"
     app:closeIconVisible="true"
     tools:text="account@mairie" />
