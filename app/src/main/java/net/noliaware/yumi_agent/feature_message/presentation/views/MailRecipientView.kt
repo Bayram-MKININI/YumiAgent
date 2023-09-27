@@ -12,6 +12,7 @@ import androidx.core.view.isEmpty
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doBeforeTextChanged
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import kotlinx.coroutines.Job
@@ -48,15 +49,17 @@ class MailRecipientView @JvmOverloads constructor(
         chipGroup = contentView.findViewById(R.id.recipients_chip_group)
         recipientEditText = contentView.findViewById(R.id.recipient_edit_text)
         recipientEditText.apply {
+            var isDeleting = false
+            doBeforeTextChanged { _, _, before, count ->
+                isDeleting = before > count
+            }
             doAfterTextChanged {
                 debounceJob?.cancel()
                 debounceJob = viewScope.launch {
                     val text = it.toString()
-                    if (text.lastOrNull() == '@') {
+                    if (!isDeleting && text.lastOrNull() == '@') {
                         delay(Duration.ofMillis(300))
-                        this@apply.post {
-                            this@apply.append(mailDomain)
-                        }
+                        append(mailDomain)
                     }
                     if (listOf(' ', ',').any { symbol -> text.lastOrNull() == symbol }) {
                         delay(Duration.ofMillis(50))
@@ -76,10 +79,7 @@ class MailRecipientView @JvmOverloads constructor(
                     if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DEL) {
                         if ((view as EditText).length() == 0 && chipGroup.childCount > 0) {
                             val chip = chipGroup.getChildAt(chipGroup.childCount - 1) as Chip
-                            chipGroup.removeView(chip)
-                            if (chipGroup.isEmpty()) {
-                                chipGroup.isGone = true
-                            }
+                            removeChipView(chip)
                         }
                     }
                 }
@@ -106,12 +106,19 @@ class MailRecipientView @JvmOverloads constructor(
         (chipGroup.inflate(R.layout.mail_recipient_chip_layout) as Chip).apply {
             text = account
             setOnCloseIconClickListener {
-                chipGroup.removeView(this@apply)
+                removeChipView(this@apply)
             }
             if (chipGroup.isGone) {
                 chipGroup.isVisible = true
             }
             chipGroup.addView(this@apply)
+        }
+    }
+
+    private fun removeChipView(chip: Chip) {
+        chipGroup.removeView(chip)
+        if (chipGroup.isEmpty()) {
+            chipGroup.isGone = true
         }
     }
 
