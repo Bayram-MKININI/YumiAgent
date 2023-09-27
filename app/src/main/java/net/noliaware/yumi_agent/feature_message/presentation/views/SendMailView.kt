@@ -40,7 +40,7 @@ class SendMailView @JvmOverloads constructor(
     private lateinit var contentView: View
     private lateinit var titleTextView: TextView
 
-    private lateinit var mailRecipientListView: MailRecipientListView
+    private lateinit var mailRecipientView: MailRecipientView
 
     private lateinit var messageBackgroundView: View
     private lateinit var subjectEditText: EditText
@@ -79,7 +79,7 @@ class SendMailView @JvmOverloads constructor(
 
         titleTextView = contentView.findViewById(R.id.title_text_view)
 
-        mailRecipientListView = contentView.findViewById(R.id.mail_recipient_list_view)
+        mailRecipientView = contentView.findViewById(R.id.mail_recipient_list_view)
 
         messageBackgroundView = contentView.findViewById(R.id.message_background)
         subjectEditText = contentView.findViewById(R.id.subject_edit_text)
@@ -109,7 +109,7 @@ class SendMailView @JvmOverloads constructor(
             when (it.id) {
                 R.id.back_view -> callback?.onBackButtonClicked()
                 R.id.send_icon_view -> callback?.onSendMailClicked(
-                    mailRecipientListView.getRecipients(),
+                    mailRecipientView.getRecipients(),
                     subjectEditText.text.toString(),
                     mailEditText.text.toString()
                 )
@@ -118,11 +118,11 @@ class SendMailView @JvmOverloads constructor(
     }
 
     fun setMailDomain(mailDomain: String) {
-        mailRecipientListView.mailDomain = mailDomain
+        mailRecipientView.mailDomain = mailDomain
     }
 
     fun setRecipientFixed(recipient: String) {
-        mailRecipientListView.setRecipientFixed(recipient)
+        mailRecipientView.setRecipientFixed(recipient)
     }
 
     fun setSubjectFixed(subject: String) {
@@ -190,12 +190,12 @@ class SendMailView @JvmOverloads constructor(
         val screenHeight = viewHeight - getStatusBarHeight()
         val messageBackgroundViewWidth = contentView.measuredWidth * 95 / 100
 
-        mailRecipientListView.measure(
+        mailRecipientView.measure(
             MeasureSpec.makeMeasureSpec(messageBackgroundViewWidth, MeasureSpec.EXACTLY),
             MeasureSpec.makeMeasureSpec(convertDpToPx(48), MeasureSpec.EXACTLY)
         )
 
-        val messageBackgroundViewHeight = contentView.measuredHeight - (titleTextView.measuredHeight + mailRecipientListView.measuredHeight +
+        val messageBackgroundViewHeight = contentView.measuredHeight - (titleTextView.measuredHeight + mailRecipientView.measuredHeight +
                     sendButton.measuredHeight / 2 +
                     if (visibleBounds.height() == screenHeight) {
                         convertDpToPx(50)
@@ -298,14 +298,14 @@ class SendMailView @JvmOverloads constructor(
             convertDpToPx(15)
         )
 
-        mailRecipientListView.layoutToTopLeft(
-            (contentView.measuredWidth - mailRecipientListView.measuredWidth) / 2,
+        mailRecipientView.layoutToTopLeft(
+            (contentView.measuredWidth - mailRecipientView.measuredWidth) / 2,
             titleTextView.bottom + convertDpToPx(15)
         )
 
         messageBackgroundView.layoutToTopLeft(
             (contentView.measuredWidth - messageBackgroundView.measuredWidth) / 2,
-            mailRecipientListView.bottom + convertDpToPx(10)
+            mailRecipientView.bottom + convertDpToPx(10)
         )
 
         val spaceForMessageObject = listOf(

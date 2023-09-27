@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mail_layout"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:parentTag="net.noliaware.yumi_agent.feature_message.presentation.views.MailRecipientListView">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:parentTag="net.noliaware.yumi_agent.feature_message.presentation.views.MailRecipientView">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/content_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:divider="@drawable/empty_divider_10dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingHorizontal="15dp"
-        android:showDividers="middle">
+        android:paddingHorizontal="15dp">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/recipients_chip_group"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="10dp"
+            android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/recipient_edit_text"
@@ -29,5 +33,6 @@
             android:textColor="@color/grey_2"
             android:textCursorDrawable="@null"
             android:textSize="16sp" />
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 </merge>
