@@ -7,14 +7,15 @@ import net.noliaware.yumi_agent.commun.data.remote.RemoteApi
 import net.noliaware.yumi_agent.commun.domain.model.SessionData
 import net.noliaware.yumi_agent.commun.util.ErrorType
 import net.noliaware.yumi_agent.commun.util.Resource
+import net.noliaware.yumi_agent.commun.util.currentTimeInMillis
 import net.noliaware.yumi_agent.commun.util.generateToken
 import net.noliaware.yumi_agent.commun.util.getCommonWSParams
 import net.noliaware.yumi_agent.commun.util.handleSessionWithNoFailure
+import net.noliaware.yumi_agent.commun.util.randomString
 import net.noliaware.yumi_agent.feature_profile.domain.model.UserProfile
 import net.noliaware.yumi_agent.feature_profile.domain.repository.ProfileRepository
 import okio.IOException
 import retrofit2.HttpException
-import java.util.UUID
 import javax.inject.Inject
 
 class ProfileRepositoryImpl @Inject constructor(
@@ -27,9 +28,8 @@ class ProfileRepositoryImpl @Inject constructor(
         emit(Resource.Loading())
 
         try {
-
-            val timestamp = System.currentTimeMillis().toString()
-            val randomString = UUID.randomUUID().toString()
+            val timestamp = currentTimeInMillis()
+            val randomString = randomString()
 
             val remoteData = api.fetchAccount(
                 timestamp = timestamp,

@@ -8,9 +8,15 @@ import net.noliaware.yumi_agent.commun.ApiParameters.LIST_PAGE_SIZE
 import net.noliaware.yumi_agent.commun.ApiParameters.OFFSET
 import net.noliaware.yumi_agent.commun.data.remote.RemoteApi
 import net.noliaware.yumi_agent.commun.domain.model.SessionData
-import net.noliaware.yumi_agent.commun.util.*
+import net.noliaware.yumi_agent.commun.util.ErrorType
+import net.noliaware.yumi_agent.commun.util.PaginationException
+import net.noliaware.yumi_agent.commun.util.currentTimeInMillis
+import net.noliaware.yumi_agent.commun.util.generateToken
+import net.noliaware.yumi_agent.commun.util.getCommonWSParams
+import net.noliaware.yumi_agent.commun.util.handlePagingSourceError
+import net.noliaware.yumi_agent.commun.util.randomString
+import net.noliaware.yumi_agent.commun.util.resolvePaginatedListErrorIfAny
 import net.noliaware.yumi_agent.feature_message.domain.model.Message
-import java.util.*
 
 class InboxMessagePagingSource(
     private val api: RemoteApi,
@@ -28,8 +34,8 @@ class InboxMessagePagingSource(
         try {
             val nextPage = params.key ?: 0
 
-            val timestamp = System.currentTimeMillis().toString()
-            val randomString = UUID.randomUUID().toString()
+            val timestamp = currentTimeInMillis()
+            val randomString = randomString()
 
             val remoteData = api.fetchInboxMessages(
                 timestamp = timestamp,

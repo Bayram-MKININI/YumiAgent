@@ -19,14 +19,15 @@ import net.noliaware.yumi_agent.commun.data.remote.RemoteApi
 import net.noliaware.yumi_agent.commun.domain.model.SessionData
 import net.noliaware.yumi_agent.commun.util.ErrorType
 import net.noliaware.yumi_agent.commun.util.Resource
+import net.noliaware.yumi_agent.commun.util.currentTimeInMillis
 import net.noliaware.yumi_agent.commun.util.generateToken
 import net.noliaware.yumi_agent.commun.util.getCommonWSParams
 import net.noliaware.yumi_agent.commun.util.handleSessionWithNoFailure
+import net.noliaware.yumi_agent.commun.util.randomString
 import net.noliaware.yumi_agent.feature_message.domain.model.Message
 import net.noliaware.yumi_agent.feature_message.domain.repository.MessageRepository
 import okio.IOException
 import retrofit2.HttpException
-import java.util.UUID
 import javax.inject.Inject
 
 class MessageRepositoryImpl @Inject constructor(
@@ -57,9 +58,8 @@ class MessageRepositoryImpl @Inject constructor(
         emit(Resource.Loading())
 
         try {
-
-            val timestamp = System.currentTimeMillis().toString()
-            val randomString = UUID.randomUUID().toString()
+            val timestamp = currentTimeInMillis()
+            val randomString = randomString()
 
             val remoteData = api.fetchInboxMessageForId(
                 timestamp = timestamp,
@@ -112,9 +112,8 @@ class MessageRepositoryImpl @Inject constructor(
         emit(Resource.Loading())
 
         try {
-
-            val timestamp = System.currentTimeMillis().toString()
-            val randomString = UUID.randomUUID().toString()
+            val timestamp = currentTimeInMillis()
+            val randomString = randomString()
 
             val remoteData = api.fetchOutboxMessageForId(
                 timestamp = timestamp,
@@ -164,9 +163,8 @@ class MessageRepositoryImpl @Inject constructor(
         emit(Resource.Loading())
 
         try {
-
-            val timestamp = System.currentTimeMillis().toString()
-            val randomString = UUID.randomUUID().toString()
+            val timestamp = currentTimeInMillis()
+            val randomString = randomString()
 
             val remoteData = api.sendMessage(
                 timestamp = timestamp,
@@ -232,9 +230,8 @@ class MessageRepositoryImpl @Inject constructor(
         emit(Resource.Loading())
 
         try {
-
-            val timestamp = System.currentTimeMillis().toString()
-            val randomString = UUID.randomUUID().toString()
+            val timestamp = currentTimeInMillis()
+            val randomString = randomString()
 
             val remoteData = api.deleteInboxMessageForId(
                 timestamp = timestamp,
@@ -276,9 +273,8 @@ class MessageRepositoryImpl @Inject constructor(
         emit(Resource.Loading())
 
         try {
-
-            val timestamp = System.currentTimeMillis().toString()
-            val randomString = UUID.randomUUID().toString()
+            val timestamp = currentTimeInMillis()
+            val randomString = randomString()
 
             val remoteData = api.deleteOutboxMessageForId(
                 timestamp = timestamp,
