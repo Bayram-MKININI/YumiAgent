@@ -29,18 +29,16 @@ import net.noliaware.yumi_agent.commun.ApiParameters.PUSH_TOKEN
 import net.noliaware.yumi_agent.commun.data.remote.RemoteApi
 import net.noliaware.yumi_agent.commun.data.remote.dto.SessionDTO
 import net.noliaware.yumi_agent.commun.domain.model.SessionData
-import net.noliaware.yumi_agent.commun.util.ErrorType
 import net.noliaware.yumi_agent.commun.util.Resource
 import net.noliaware.yumi_agent.commun.util.currentTimeInMillis
 import net.noliaware.yumi_agent.commun.util.generateToken
 import net.noliaware.yumi_agent.commun.util.getCommonWSParams
+import net.noliaware.yumi_agent.commun.util.handleRemoteCallError
 import net.noliaware.yumi_agent.commun.util.handleSessionWithNoFailure
 import net.noliaware.yumi_agent.commun.util.randomString
 import net.noliaware.yumi_agent.feature_login.domain.model.AccountData
 import net.noliaware.yumi_agent.feature_login.domain.model.InitData
 import net.noliaware.yumi_agent.feature_login.domain.repository.LoginRepository
-import okio.IOException
-import retrofit2.HttpException
 import javax.inject.Inject
 
 class LoginRepositoryImpl @Inject constructor(
@@ -89,10 +87,8 @@ class LoginRepositoryImpl @Inject constructor(
                 }
             }
 
-        } catch (ex: HttpException) {
-            emit(Resource.Error(errorType = ErrorType.SYSTEM_ERROR))
-        } catch (ex: IOException) {
-            emit(Resource.Error(errorType = ErrorType.NETWORK_ERROR))
+        } catch (ex: Exception) {
+            handleRemoteCallError(ex)
         }
     }
 
@@ -163,10 +159,8 @@ class LoginRepositoryImpl @Inject constructor(
                 }
             }
 
-        } catch (ex: HttpException) {
-            emit(Resource.Error(errorType = ErrorType.SYSTEM_ERROR))
-        } catch (ex: IOException) {
-            emit(Resource.Error(errorType = ErrorType.NETWORK_ERROR))
+        } catch (ex: Exception) {
+            handleRemoteCallError(ex)
         }
     }
 

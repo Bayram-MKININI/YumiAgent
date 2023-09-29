@@ -6,17 +6,15 @@ import net.noliaware.yumi_agent.commun.ApiConstants.GET_BACK_OFFICE_SIGN_IN_CODE
 import net.noliaware.yumi_agent.commun.ApiConstants.SET_PRIVACY_POLICY_READ_STATUS
 import net.noliaware.yumi_agent.commun.data.remote.RemoteApi
 import net.noliaware.yumi_agent.commun.domain.model.SessionData
-import net.noliaware.yumi_agent.commun.util.ErrorType
 import net.noliaware.yumi_agent.commun.util.Resource
 import net.noliaware.yumi_agent.commun.util.currentTimeInMillis
 import net.noliaware.yumi_agent.commun.util.generateToken
 import net.noliaware.yumi_agent.commun.util.getCommonWSParams
+import net.noliaware.yumi_agent.commun.util.handleRemoteCallError
 import net.noliaware.yumi_agent.commun.util.handleSessionWithNoFailure
 import net.noliaware.yumi_agent.commun.util.randomString
 import net.noliaware.yumi_agent.feature_auth.domain.model.BOSignIn
 import net.noliaware.yumi_agent.feature_auth.domain.repository.AuthRepository
-import okio.IOException
-import retrofit2.HttpException
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -60,10 +58,8 @@ class AuthRepositoryImpl @Inject constructor(
                 )
             }
 
-        } catch (ex: HttpException) {
-            emit(Resource.Error(errorType = ErrorType.SYSTEM_ERROR))
-        } catch (ex: IOException) {
-            emit(Resource.Error(errorType = ErrorType.NETWORK_ERROR))
+        } catch (ex: Exception) {
+            handleRemoteCallError(ex)
         }
     }
 
@@ -106,10 +102,8 @@ class AuthRepositoryImpl @Inject constructor(
                 }
             }
 
-        } catch (ex: HttpException) {
-            emit(Resource.Error(errorType = ErrorType.SYSTEM_ERROR))
-        } catch (ex: IOException) {
-            emit(Resource.Error(errorType = ErrorType.NETWORK_ERROR))
+        } catch (ex: Exception) {
+            handleRemoteCallError(ex)
         }
     }
 }
