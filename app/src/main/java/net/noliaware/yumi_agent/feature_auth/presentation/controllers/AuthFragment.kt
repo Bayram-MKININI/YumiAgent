@@ -12,6 +12,7 @@ import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.DateTime.DAY_OF_MONTH_TEXT_DATE_FORMAT
 import net.noliaware.yumi_agent.commun.DateTime.HOURS_TIME_FORMAT
 import net.noliaware.yumi_agent.commun.util.parseTimestampToDate
+import net.noliaware.yumi_agent.commun.util.safeNavigate
 import net.noliaware.yumi_agent.feature_auth.presentation.views.AuthView
 import net.noliaware.yumi_agent.feature_auth.presentation.views.AuthView.AuthViewAdapter
 import net.noliaware.yumi_agent.feature_auth.presentation.views.AuthView.AuthViewCallback
@@ -81,7 +82,7 @@ class AuthFragment : Fragment() {
 
     private val authViewCallback: AuthViewCallback by lazy {
         AuthViewCallback {
-            findNavController().navigate(
+            findNavController().safeNavigate(
                 AuthFragmentDirections.actionAuthFragmentToBOSignInFragment()
             )
         }

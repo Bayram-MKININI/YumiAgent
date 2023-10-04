@@ -22,6 +22,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
@@ -318,6 +320,12 @@ private fun Fragment.redirectToLoginScreenInternal() {
     (activity?.supportFragmentManager?.findFragmentById(
         R.id.app_nav_host_fragment
     ) as? NavHostFragment)?.findNavController()?.setGraph(R.navigation.app_nav_graph)
+}
+
+fun NavController.safeNavigate(
+    direction: NavDirections
+) = currentDestination?.getAction(direction.actionId)?.run {
+    navigate(direction)
 }
 
 fun Fragment.navDismiss() {

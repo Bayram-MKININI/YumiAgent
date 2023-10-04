@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.collectLatest
 import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.presentation.adapters.ListLoadStateAdapter
 import net.noliaware.yumi_agent.commun.util.handlePaginationError
+import net.noliaware.yumi_agent.commun.util.safeNavigate
 import net.noliaware.yumi_agent.feature_message.presentation.adapters.MessageAdapter
 import net.noliaware.yumi_agent.feature_message.presentation.mappers.ReceivedMessageMapper
 import net.noliaware.yumi_agent.feature_message.presentation.views.MessagesListView
@@ -36,7 +37,7 @@ class ReceivedMessagesFragment : Fragment() {
         return inflater.inflate(R.layout.messages_list_layout, container, false).apply {
             messagesListView = this as MessagesListView
             messagesListView?.messageAdapter = MessageAdapter(ReceivedMessageMapper()) { message ->
-                findNavController().navigate(
+                findNavController().safeNavigate(
                     MessagingFragmentDirections.actionMessagingFragmentToReadInboxMailFragment(
                         message.messageId
                     )

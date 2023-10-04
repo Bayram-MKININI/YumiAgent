@@ -16,6 +16,7 @@ import net.noliaware.yumi_agent.commun.util.ViewModelState
 import net.noliaware.yumi_agent.commun.util.formatNumber
 import net.noliaware.yumi_agent.commun.util.handleSharedEvent
 import net.noliaware.yumi_agent.commun.util.redirectToLoginScreenFromSharedEvent
+import net.noliaware.yumi_agent.commun.util.safeNavigate
 import net.noliaware.yumi_agent.feature_profile.domain.model.UserProfile
 import net.noliaware.yumi_agent.feature_profile.presentation.views.ProfileParentView
 import net.noliaware.yumi_agent.feature_profile.presentation.views.ProfileView
@@ -100,7 +101,7 @@ class UserProfileFragment : Fragment() {
 
     private val profileViewCallback: ProfileView.ProfileViewCallback by lazy {
         ProfileView.ProfileViewCallback {
-            findNavController().navigate(
+            findNavController().safeNavigate(
                 UserProfileFragmentDirections.actionUserProfileFragmentToPrivacyPolicyFragment(
                     privacyPolicyUrl = args.accountData.privacyPolicyUrl,
                     isPrivacyPolicyConfirmationRequired = false

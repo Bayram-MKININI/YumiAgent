@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.delay
 import net.noliaware.yumi_agent.R
+import net.noliaware.yumi_agent.commun.util.safeNavigate
 import net.noliaware.yumi_agent.feature_auth.presentation.views.HomeMenuView.*
 import net.noliaware.yumi_agent.feature_auth.presentation.views.HomeView
 import net.noliaware.yumi_agent.feature_login.domain.model.AccountData
@@ -71,7 +72,7 @@ class HomeFragment : Fragment() {
         if (accountData.shouldConfirmPrivacyPolicy) {
             viewLifecycleOwner.lifecycleScope.launch {
                 delay(Duration.ofMillis(150))
-                findNavController().navigate(
+                findNavController().safeNavigate(
                     HomeFragmentDirections.actionHomeFragmentToPrivacyPolicyFragment(
                         privacyPolicyUrl = accountData.privacyPolicyUrl,
                         isPrivacyPolicyConfirmationRequired = true
