@@ -6,13 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import net.noliaware.yumi_agent.R
-import net.noliaware.yumi_agent.commun.util.ViewModelState
+import net.noliaware.yumi_agent.commun.util.ViewState
+import net.noliaware.yumi_agent.commun.util.collectLifecycleAware
 import net.noliaware.yumi_agent.commun.util.formatNumber
 import net.noliaware.yumi_agent.commun.util.handleSharedEvent
 import net.noliaware.yumi_agent.commun.util.redirectToLoginScreenFromSharedEvent
@@ -42,25 +41,22 @@ class UserProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        profileDataParentView?.activateLoading(true)
         collectFlows()
     }
 
     private fun collectFlows() {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.eventsHelper.eventFlow.collectLatest { sharedEvent ->
-                profileDataParentView?.activateLoading(false)
-                handleSharedEvent(sharedEvent)
-                redirectToLoginScreenFromSharedEvent(sharedEvent)
-            }
+        viewModel.eventsHelper.eventFlow.collectLifecycleAware(viewLifecycleOwner) { sharedEvent ->
+            profileDataParentView?.activateLoading(false)
+            handleSharedEvent(sharedEvent)
+            redirectToLoginScreenFromSharedEvent(sharedEvent)
         }
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.eventsHelper.stateFlow.collect { vmState ->
-                when (vmState) {
-                    is ViewModelState.LoadingState -> profileDataParentView?.activateLoading(true)
-                    is ViewModelState.DataState -> vmState.data?.let { userProfile ->
-                        profileDataParentView?.activateLoading(false)
-                        bindViewToData(userProfile)
-                    }
+        viewModel.eventsHelper.stateFlow.collectLifecycleAware(viewLifecycleOwner) { viewState ->
+            when (viewState) {
+                is ViewState.LoadingState -> Unit
+                is ViewState.DataState -> viewState.data?.let { userProfile ->
+                    profileDataParentView?.activateLoading(false)
+                    bindViewToData(userProfile)
                 }
             }
         }

@@ -11,8 +11,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.presentation.adapters.ListLoadStateAdapter
+import net.noliaware.yumi_agent.commun.util.collectLifecycleAware
 import net.noliaware.yumi_agent.commun.util.handlePaginationError
 import net.noliaware.yumi_agent.commun.util.safeNavigate
 import net.noliaware.yumi_agent.feature_message.presentation.adapters.MessageAdapter
@@ -53,12 +55,10 @@ class SentMessagesFragment : Fragment() {
     }
 
     private fun collectFlows() {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.onSentListRefreshedEventFlow.collectLatest {
-                messagesListView?.messageAdapter?.refresh()
-            }
+        viewModel.onSentListRefreshedEventFlow.collectLifecycleAware(viewLifecycleOwner) {
+            messagesListView?.messageAdapter?.refresh()
         }
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewLifecycleOwner.lifecycleScope.launch {
             messagesListView?.messageAdapter?.loadStateFlow?.collectLatest { loadState ->
 
                 val noMessagesLoaded = (messagesListView?.messageAdapter?.itemCount ?: 0) < 1
@@ -73,7 +73,7 @@ class SentMessagesFragment : Fragment() {
                 }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getSentMessages().collectLatest {
                 messagesListView?.messageAdapter?.withLoadStateFooter(
                     footer = ListLoadStateAdapter()

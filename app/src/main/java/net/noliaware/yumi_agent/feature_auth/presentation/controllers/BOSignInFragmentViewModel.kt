@@ -15,9 +15,9 @@ import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.time.delay
 import net.noliaware.yumi_agent.commun.presentation.EventsHelper
-import net.noliaware.yumi_agent.feature_auth.domain.repository.AuthRepository
 import net.noliaware.yumi_agent.feature_auth.domain.model.BOSignIn
 import net.noliaware.yumi_agent.feature_auth.domain.model.TimerState
+import net.noliaware.yumi_agent.feature_auth.domain.repository.AuthRepository
 import java.time.Duration
 import javax.inject.Inject
 
@@ -27,7 +27,9 @@ class BOSignInFragmentViewModel @Inject constructor(
 ) : ViewModel() {
 
     val eventsHelper = EventsHelper<BOSignIn>()
-    private var _timerStateFlow = MutableStateFlow(TimerState())
+    private val _timerStateFlow: MutableStateFlow<TimerState> by lazy {
+        MutableStateFlow(TimerState())
+    }
     val timerStateFlow: StateFlow<TimerState> = _timerStateFlow
 
     init {

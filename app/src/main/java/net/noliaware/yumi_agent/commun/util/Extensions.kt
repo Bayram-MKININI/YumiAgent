@@ -22,6 +22,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment
@@ -36,7 +39,10 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import net.noliaware.yumi_agent.BuildConfig
 import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.*
@@ -314,6 +320,17 @@ fun Fragment.handlePaginationError(
         }
     }
     return false
+}
+
+fun <T> Flow<T>.collectLifecycleAware(
+    owner: LifecycleOwner,
+    action: suspend (value: T) -> Unit
+) {
+    owner.lifecycleScope.launch {
+        this@collectLifecycleAware.flowWithLifecycle(owner.lifecycle).collectLatest {
+            action.invoke(it)
+        }
+    }
 }
 
 private fun Fragment.redirectToLoginScreenInternal() {

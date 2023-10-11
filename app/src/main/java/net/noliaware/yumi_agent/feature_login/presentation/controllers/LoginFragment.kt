@@ -11,19 +11,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.Push.ACTION_PUSH_DATA
 import net.noliaware.yumi_agent.commun.Push.PUSH_BODY
 import net.noliaware.yumi_agent.commun.Push.PUSH_TITLE
-import net.noliaware.yumi_agent.commun.util.ViewModelState.DataState
-import net.noliaware.yumi_agent.commun.util.ViewModelState.LoadingState
+import net.noliaware.yumi_agent.commun.util.ViewState.DataState
+import net.noliaware.yumi_agent.commun.util.ViewState.LoadingState
+import net.noliaware.yumi_agent.commun.util.collectLifecycleAware
 import net.noliaware.yumi_agent.commun.util.handleSharedEvent
 import net.noliaware.yumi_agent.commun.util.safeNavigate
 import net.noliaware.yumi_agent.commun.util.startWebBrowserAtURL
@@ -96,66 +95,56 @@ class LoginFragment : Fragment() {
     )
 
     private fun collectFlows() {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.forceUpdateStateFlow.collectLatest { vmState ->
-                when (vmState) {
-                    is LoadingState -> loginLayout?.setLoginViewProgressVisible(true)
-                    is DataState -> vmState.data?.let {
-                        loginLayout?.setLoginViewProgressVisible(false)
-                        showForceUpdateDialog()
-                    }
+        viewModel.forceUpdateStateFlow.collectLifecycleAware(viewLifecycleOwner) { viewState ->
+            when (viewState) {
+                is LoadingState -> loginLayout?.setLoginViewProgressVisible(true)
+                is DataState -> viewState.data?.let {
+                    loginLayout?.setLoginViewProgressVisible(false)
+                    showForceUpdateDialog()
                 }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.prefsStateFlow.collectLatest { vmState ->
-                when (vmState) {
-                    is LoadingState -> Unit
-                    is DataState -> vmState.data?.let { userPrefs ->
-                        loginLayout?.setLogin(userPrefs.login)
-                    }
+        viewModel.prefsStateFlow.collectLifecycleAware(viewLifecycleOwner) { viewState ->
+            when (viewState) {
+                is LoadingState -> Unit
+                is DataState -> viewState.data?.let { userPrefs ->
+                    loginLayout?.setLogin(userPrefs.login)
                 }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.initEventsHelper.eventFlow.collectLatest { sharedEvent ->
-                loginLayout?.setLoginViewProgressVisible(false)
-                handleSharedEvent(sharedEvent)
-            }
+        viewModel.initEventsHelper.eventFlow.collectLifecycleAware(viewLifecycleOwner) { sharedEvent ->
+            loginLayout?.setLoginViewProgressVisible(false)
+            viewModel.resetForceUpdateStateFlow()
+            handleSharedEvent(sharedEvent)
         }
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.initEventsHelper.stateFlow.collect { vmState ->
-                when (vmState) {
-                    is LoadingState -> Unit
-                    is DataState -> vmState.data?.let { initData ->
-                        viewModel.saveDeviceIdPreferences(initData.deviceId)
-                        loginLayout?.setLoginViewProgressVisible(false)
-                        loginLayout?.displayPasswordView()
-                        loginLayout?.fillPadViewWithData(initData.keyboard)
-                    }
+        viewModel.initEventsHelper.stateFlow.collectLifecycleAware(viewLifecycleOwner) { viewState ->
+            when (viewState) {
+                is LoadingState -> Unit
+                is DataState -> viewState.data?.let { initData ->
+                    viewModel.saveDeviceIdPreferences(initData.deviceId)
+                    loginLayout?.setLoginViewProgressVisible(false)
+                    loginLayout?.displayPasswordView()
+                    loginLayout?.fillPadViewWithData(initData.keyboard)
                 }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.accountDataEventsHelper.eventFlow.collectLatest { sharedEvent ->
-                loginLayout?.let {
+        viewModel.accountDataEventsHelper.eventFlow.collectLifecycleAware(viewLifecycleOwner) { sharedEvent ->
+            loginLayout?.let {
+                loginLayout?.setPasswordViewProgressVisible(false)
+                viewModel.accountDataEventsHelper.resetStateData()
+                it.clearSecretDigits()
+                passwordIndexes.clear()
+            }
+            handleSharedEvent(sharedEvent)
+        }
+        viewModel.accountDataEventsHelper.stateFlow.collectLifecycleAware(viewLifecycleOwner) { viewState ->
+            when (viewState) {
+                is LoadingState -> loginLayout?.setPasswordViewProgressVisible(true)
+                is DataState -> viewState.data?.let { accountData ->
                     loginLayout?.setPasswordViewProgressVisible(false)
-                    it.clearSecretDigits()
-                    passwordIndexes.clear()
-                }
-                handleSharedEvent(sharedEvent)
-            }
-        }
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.accountDataEventsHelper.stateFlow.collect { vmState ->
-                when (vmState) {
-                    is LoadingState -> loginLayout?.setPasswordViewProgressVisible(true)
-                    is DataState -> vmState.data?.let { accountData ->
-                        loginLayout?.setPasswordViewProgressVisible(false)
-                        findNavController().safeNavigate(
-                            LoginFragmentDirections.actionLoginFragmentToHomeFragment(accountData)
-                        )
-                    }
+                    findNavController().safeNavigate(
+                        LoginFragmentDirections.actionLoginFragmentToHomeFragment(accountData)
+                    )
                 }
             }
         }
