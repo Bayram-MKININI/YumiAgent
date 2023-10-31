@@ -23,7 +23,7 @@ import net.noliaware.yumi_agent.feature_login.domain.model.TFAMode
 class AuthFragment : Fragment() {
 
     private var authView: AuthView? = null
-    private val args: AuthFragmentArgs by navArgs()
+    private val args by navArgs<AuthFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
