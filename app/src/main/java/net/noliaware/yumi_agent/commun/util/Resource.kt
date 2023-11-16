@@ -2,29 +2,16 @@ package net.noliaware.yumi_agent.commun.util
 
 import net.noliaware.yumi_agent.commun.domain.model.AppMessage
 
-sealed class Resource<T>(
-    val data: T? = null,
-    val errorType: ErrorType = ErrorType.NONE,
-    val appMessage: AppMessage? = null,
-    val errorMessage: String? = null
-) {
-    class Loading<T> : Resource<T>()
+sealed interface Resource<T> {
+    class Loading<T> : Resource<T>
 
-    class Success<T>(
-        data: T,
-        appMessage: AppMessage? = null
-    ) : Resource<T>(
-        data = data,
-        appMessage = appMessage
-    )
+    data class Success<T>(
+        val data: T,
+        val appMessage: AppMessage? = null
+    ) : Resource<T>
 
-    class Error<T>(
-        errorType: ErrorType,
-        errorMessage: String? = null,
-        appMessage: AppMessage? = null
-    ) : Resource<T>(
-        errorType = errorType,
-        errorMessage = errorMessage,
-        appMessage = appMessage
-    )
+    data class Error<T>(
+        val appMessage: AppMessage? = null,
+        val serviceError: ServiceError = ServiceError.ErrNone
+    ) : Resource<T>
 }

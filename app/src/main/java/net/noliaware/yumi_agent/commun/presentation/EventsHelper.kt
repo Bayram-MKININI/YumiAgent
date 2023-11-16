@@ -4,10 +4,15 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import net.noliaware.yumi_agent.commun.util.ServiceError.ErrNetwork
+import net.noliaware.yumi_agent.commun.util.ServiceError.ErrSystem
 import net.noliaware.yumi_agent.R
-import net.noliaware.yumi_agent.commun.util.ErrorType
+import net.noliaware.yumi_agent.commun.util.ErrorUI.ErrUINetwork
+import net.noliaware.yumi_agent.commun.util.ErrorUI.ErrUISystem
 import net.noliaware.yumi_agent.commun.util.Resource
 import net.noliaware.yumi_agent.commun.util.UIEvent
+import net.noliaware.yumi_agent.commun.util.UIEvent.ShowAppMessage
+import net.noliaware.yumi_agent.commun.util.UIEvent.ShowError
 import net.noliaware.yumi_agent.commun.util.ViewState
 import net.noliaware.yumi_agent.commun.util.ViewState.DataState
 import net.noliaware.yumi_agent.commun.util.ViewState.LoadingState
@@ -37,7 +42,7 @@ class EventsHelper<S> {
                     _stateFlow.value = DataState(it)
                 }
                 result.appMessage?.let {
-                    _eventFlow.emit(UIEvent.ShowAppMessage(it))
+                    _eventFlow.emit(ShowAppMessage(it))
                 }
             }
             is Resource.Loading -> {
@@ -45,27 +50,20 @@ class EventsHelper<S> {
             }
             is Resource.Error -> {
                 result.appMessage?.let {
-                    _eventFlow.emit(UIEvent.ShowAppMessage(it))
+                    _eventFlow.emit(ShowAppMessage(it))
                     return
                 }
-                when (result.errorType) {
-                    ErrorType.NETWORK_ERROR -> {
-                        _eventFlow.emit(
-                            UIEvent.ShowError(
-                                errorType = ErrorType.NETWORK_ERROR,
-                                errorStrRes = R.string.error_no_network
-                            )
-                        )
+                val errorUI = when (val serviceError = result.serviceError) {
+                    is ErrNetwork -> ErrUINetwork(R.string.error_no_network)
+                    is ErrSystem -> {
+                        serviceError.errorMessage?.let { errorMessage ->
+                            ErrUISystem(errorMessage = errorMessage)
+                        } ?: ErrUISystem(errorStrRes = R.string.error_contact_support)
                     }
-                    ErrorType.SYSTEM_ERROR -> {
-                        _eventFlow.emit(
-                            UIEvent.ShowError(
-                                errorType = ErrorType.SYSTEM_ERROR,
-                                errorStrRes = R.string.error_contact_support
-                            )
-                        )
-                    }
-                    else -> Unit
+                    else -> null
+                }
+                errorUI?.let {
+                    _eventFlow.emit(ShowError(errorUI = it))
                 }
             }
         }

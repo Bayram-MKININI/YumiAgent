@@ -2,13 +2,13 @@ package net.noliaware.yumi_agent.feature_alerts.data.repository
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import net.noliaware.yumi_agent.commun.util.ServiceError.ErrNone
 import net.noliaware.yumi_agent.commun.ApiConstants.GET_ALERT_LIST
 import net.noliaware.yumi_agent.commun.ApiParameters.LIMIT
 import net.noliaware.yumi_agent.commun.ApiParameters.LIST_PAGE_SIZE
 import net.noliaware.yumi_agent.commun.ApiParameters.TIMESTAMP_OFFSET
 import net.noliaware.yumi_agent.commun.data.remote.RemoteApi
 import net.noliaware.yumi_agent.commun.domain.model.SessionData
-import net.noliaware.yumi_agent.commun.util.ErrorType
 import net.noliaware.yumi_agent.commun.util.PaginationException
 import net.noliaware.yumi_agent.commun.util.currentTimeInMillis
 import net.noliaware.yumi_agent.commun.util.generateToken
@@ -44,14 +44,14 @@ class AlertPagingSource(
                 params = generateGetAlertsListParams(nextTimestamp, GET_ALERT_LIST)
             )
 
-            val errorType = resolvePaginatedListErrorIfAny(
+            val serviceError = resolvePaginatedListErrorIfAny(
                 session = remoteData.session,
                 sessionData = sessionData,
                 tokenKey = GET_ALERT_LIST
             )
 
-            if (errorType != ErrorType.RECOVERABLE_ERROR) {
-                throw PaginationException(errorType)
+            if (serviceError !is ErrNone) {
+                throw PaginationException(serviceError)
             }
 
             val alertTimestamp =
