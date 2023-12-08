@@ -1,5 +1,6 @@
 package net.noliaware.yumi_agent.feature_message.presentation.controllers
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import net.noliaware.yumi_agent.R
@@ -35,6 +37,7 @@ import net.noliaware.yumi_agent.feature_message.presentation.views.ReadMailView.
 @AndroidEntryPoint
 class ReadInboxMailFragment : AppCompatDialogFragment() {
 
+    private val args by navArgs<ReadInboxMailFragmentArgs>()
     private var readMailView: ReadMailView? = null
     private val viewModel by viewModels<ReadInboxMailFragmentViewModel>()
 
@@ -47,11 +50,13 @@ class ReadInboxMailFragment : AppCompatDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.read_mail_layout, container, false).apply {
-            readMailView = this as ReadMailView
-            readMailView?.callback = readMailViewCallback
-        }
+    ): View? = inflater.inflate(
+        R.layout.read_mail_layout,
+        container,
+        false
+    ).apply {
+        readMailView = this as ReadMailView
+        readMailView?.callback = readMailViewCallback
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,10 +85,6 @@ class ReadInboxMailFragment : AppCompatDialogFragment() {
                 is LoadingState -> Unit
                 is DataState -> viewState.data?.let { result ->
                     if (result) {
-                        setFragmentResult(
-                            REFRESH_RECEIVED_MESSAGES_REQUEST_KEY,
-                            bundleOf()
-                        )
                         navDismiss()
                     }
                 }
@@ -126,8 +127,8 @@ class ReadInboxMailFragment : AppCompatDialogFragment() {
                     .setTitle(R.string.delete)
                     .setMessage(R.string.delete_mail_confirmation)
                     .setPositiveButton(R.string.ok) { dialog, _ ->
-                        dialog.dismiss()
                         viewModel.callDeleteInboxMessageForId()
+                        dialog.dismiss()
                     }
                     .setNegativeButton(R.string.cancel) { dialog, _ ->
                         dialog.dismiss()
@@ -143,6 +144,16 @@ class ReadInboxMailFragment : AppCompatDialogFragment() {
                     )
                 )
             }
+        }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        if (viewModel.deleteMessageEventsHelper.stateData == true || !args.firstReadComplete) {
+            setFragmentResult(
+                requestKey = REFRESH_RECEIVED_MESSAGES_REQUEST_KEY,
+                result = bundleOf()
+            )
         }
     }
 

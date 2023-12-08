@@ -25,10 +25,15 @@ class SendMailFragmentViewModel @Inject constructor(
         messageBody: String
     ) {
         viewModelScope.launch {
-            repository.sendMessage(recipients, subject, messagePriority, messageId, messageBody)
-                .onEach { result ->
-                    messageSentEventsHelper.handleResponse(result)
-                }.launchIn(this)
+            repository.sendMessage(
+                recipients,
+                subject,
+                messagePriority,
+                messageId,
+                messageBody
+            ).onEach { result ->
+                messageSentEventsHelper.handleResponse(result)
+            }.launchIn(this)
         }
     }
 }

@@ -44,11 +44,13 @@ class SendMailFragment : AppCompatDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.send_mail_layout, container, false).apply {
-            sendMailView = this as SendMailView
-            sendMailView?.callback = sendMailViewCallback
-        }
+    ): View? = inflater.inflate(
+        R.layout.send_mail_layout,
+        container,
+        false
+    ).apply {
+        sendMailView = this as SendMailView
+        sendMailView?.callback = sendMailViewCallback
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,7 +61,7 @@ class SendMailFragment : AppCompatDialogFragment() {
     }
 
     private fun setUpPriorityDropdownView() {
-        Priority.values().map { priority ->
+        Priority.entries.map { priority ->
             val mapper = PriorityMapper()
             PriorityUI(
                 resIcon = mapper.mapPriorityIcon(priority),
@@ -124,7 +126,7 @@ class SendMailFragment : AppCompatDialogFragment() {
                 text: String
             ) {
                 val selectedPriorityIndex = sendMailView?.getSelectedPriorityIndex() ?: 0
-                val priority = Priority.values()[selectedPriorityIndex].value
+                val priority = Priority.entries[selectedPriorityIndex].value
 
                 if (args.message != null) {
                     sendMailReply(text)

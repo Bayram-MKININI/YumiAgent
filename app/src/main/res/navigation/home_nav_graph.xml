@@ -94,6 +94,9 @@
         <argument
             android:name="messageId"
             app:argType="string" />
+        <argument
+            android:name="firstReadComplete"
+            app:argType="boolean" />
         <action
             android:id="@+id/action_ReadInboxMailFragment_to_SendMailFragment"
             app:destination="@id/send_mail_fragment" />

@@ -100,7 +100,7 @@ class MessageRepositoryImpl @Inject constructor(
     ) = mutableMapOf(
         MESSAGE_ID to messageId
     ).also {
-        it.plusAssign(getCommonWSParams(sessionData, tokenKey))
+        it += getCommonWSParams(sessionData, tokenKey)
     }
 
     override fun getOutboxMessageForId(messageId: String): Flow<Resource<Message>> = flow {
@@ -214,7 +214,7 @@ class MessageRepositoryImpl @Inject constructor(
         subject?.let { map[MESSAGE_SUBJECT] = subject }
         messagePriority?.let { map[MESSAGE_PRIORITY] = messagePriority.toString() }
         messageId?.let { map[MESSAGE_ID] = messageId }
-        map.plusAssign(getCommonWSParams(sessionData, tokenKey))
+        map += getCommonWSParams(sessionData, tokenKey)
     }.toMap()
 
     override fun deleteInboxMessageForId(messageId: String): Flow<Resource<Boolean>> = flow {

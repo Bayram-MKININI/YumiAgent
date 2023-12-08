@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
-import androidx.core.content.res.ResourcesCompat
 import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.util.convertDpToPx
+import net.noliaware.yumi_agent.commun.util.getFontFromResources
 import net.noliaware.yumi_agent.commun.util.layoutToTopLeft
 import net.noliaware.yumi_agent.commun.util.layoutToTopRight
 import net.noliaware.yumi_agent.commun.util.measureWrapContent
@@ -27,11 +27,11 @@ class MessageItemView @JvmOverloads constructor(
     private lateinit var bodyTextView: TextView
 
     private val openedTypeFace by lazy {
-        ResourcesCompat.getFont(context, R.font.omnes_regular)
+        context.getFontFromResources(R.font.omnes_regular)
     }
 
     private val notOpenedTypeFace by lazy {
-        ResourcesCompat.getFont(context, R.font.omnes_semibold_regular)
+        context.getFontFromResources(R.font.omnes_semibold_regular)
     }
 
     data class MessageItemViewAdapter(
@@ -83,6 +83,8 @@ class MessageItemView @JvmOverloads constructor(
             MeasureSpec.makeMeasureSpec(subjectTextMaxWidth, MeasureSpec.AT_MOST),
             MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         )
+
+        mailTextView.measureWrapContent()
 
         val bodyTextMaxWidth = viewWidth - (iconImageView.measuredWidth + convertDpToPx(22))
         bodyTextView.measure(

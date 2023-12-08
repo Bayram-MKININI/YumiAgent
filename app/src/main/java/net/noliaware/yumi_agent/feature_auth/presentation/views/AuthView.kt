@@ -15,6 +15,7 @@ import net.noliaware.yumi_agent.commun.util.getStatusBarHeight
 import net.noliaware.yumi_agent.commun.util.layoutToBottomLeft
 import net.noliaware.yumi_agent.commun.util.layoutToTopLeft
 import net.noliaware.yumi_agent.commun.util.measureWrapContent
+import net.noliaware.yumi_agent.commun.util.sizeForVisible
 import net.noliaware.yumi_agent.commun.util.weak
 import kotlin.math.roundToInt
 
@@ -166,10 +167,8 @@ class AuthView @JvmOverloads constructor(
 
         val contentHeight = getStatusBarHeight() + boAccessImageView.measuredHeight +
                 boAccessTextView.measuredHeight + boAccessDescriptionTextView.measuredHeight +
-                if (accessButtonLayout.isVisible) {
+                accessButtonLayout.sizeForVisible {
                     accessButtonLayout.measuredHeight + convertDpToPx(15)
-                } else {
-                    0
                 } + convertDpToPx(25)
 
         boAccessImageView.layoutToTopLeft(

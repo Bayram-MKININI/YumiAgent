@@ -80,10 +80,13 @@ class InboxMessagePagingSource(
         }
     }
 
-    private fun generateGetMessagesListParams(offset: Int, tokenKey: String) = mutableMapOf(
+    private fun generateGetMessagesListParams(
+        offset: Int,
+        tokenKey: String
+    ) = mutableMapOf(
         LIMIT to LIST_PAGE_SIZE.toString(),
         OFFSET to offset.toString()
     ).also {
-        it.plusAssign(getCommonWSParams(sessionData, tokenKey))
+        it += getCommonWSParams(sessionData, tokenKey)
     }.toMap()
 }

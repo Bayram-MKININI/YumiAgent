@@ -35,16 +35,18 @@ class SentMessagesFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.messages_list_layout, container, false).apply {
-            messagesListView = this as MessagesListView
-            messagesListView?.messageAdapter = MessageAdapter(SentMessageMapper()) { message ->
-                findNavController().safeNavigate(
-                    MessagingFragmentDirections.actionMessagingFragmentToReadOutboxMailFragment(
-                        message.messageId
-                    )
+    ): View? = inflater.inflate(
+        R.layout.messages_list_layout,
+        container,
+        false
+    ).apply {
+        messagesListView = this as MessagesListView
+        messagesListView?.messageAdapter = MessageAdapter(SentMessageMapper()) { message ->
+            findNavController().safeNavigate(
+                MessagingFragmentDirections.actionMessagingFragmentToReadOutboxMailFragment(
+                    message.messageId
                 )
-            }
+            )
         }
     }
 

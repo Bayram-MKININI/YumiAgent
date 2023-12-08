@@ -2,15 +2,14 @@ package net.noliaware.yumi_agent.feature_profile.presentation.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
 import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.presentation.views.FillableTextWidget
 import net.noliaware.yumi_agent.commun.util.convertDpToPx
 import net.noliaware.yumi_agent.commun.util.getColorCompat
+import net.noliaware.yumi_agent.commun.util.getFontFromResources
 import net.noliaware.yumi_agent.commun.util.layoutToTopLeft
 import net.noliaware.yumi_agent.commun.util.layoutToTopRight
 import net.noliaware.yumi_agent.commun.util.measureWrapContent
@@ -126,9 +125,9 @@ class ProfileView @JvmOverloads constructor(
 
     private fun FillableTextWidget.setUpValueTextView() {
         textView.apply {
-            typeface = ResourcesCompat.getFont(context, R.font.omnes_semibold_regular)
+            typeface = context.getFontFromResources(R.font.omnes_semibold_regular)
             setTextColor(context.getColorCompat(R.color.grey_2))
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
+            textSize = 15f
         }
     }
 

@@ -172,9 +172,12 @@ class LoginRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun generateGetAccountParams(password: String, tokenKey: String) = mutableMapOf(
+    private fun generateGetAccountParams(
+        password: String,
+        tokenKey: String
+    ) = mutableMapOf(
         PASSWORD to password
-    ).also { it.plusAssign(getCommonWSParams(sessionData, tokenKey)) }
+    ).also { it += getCommonWSParams(sessionData, tokenKey) }
 
     private fun SessionData.fillMapWithInitialToken(sessionDTO: SessionDTO) {
         this.sessionTokens[SET_PRIVACY_POLICY_READ_STATUS] = sessionDTO.sessionToken

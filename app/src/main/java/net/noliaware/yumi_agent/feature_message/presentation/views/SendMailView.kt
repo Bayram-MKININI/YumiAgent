@@ -22,6 +22,7 @@ import net.noliaware.yumi_agent.commun.util.layoutToBottomRight
 import net.noliaware.yumi_agent.commun.util.layoutToTopLeft
 import net.noliaware.yumi_agent.commun.util.layoutToTopRight
 import net.noliaware.yumi_agent.commun.util.measureWrapContent
+import net.noliaware.yumi_agent.commun.util.sizeForVisible
 import net.noliaware.yumi_agent.commun.util.translateYByValue
 import net.noliaware.yumi_agent.commun.util.weak
 import kotlin.math.max
@@ -228,11 +229,9 @@ class SendMailView @JvmOverloads constructor(
                     prioritySpinner.measuredWidth,
                     fixedPriorityImageView.measuredWidth
                 ) + convertDpToPx(5)
-                ) - if (clearSubjectImageView.isVisible) {
-            clearSubjectImageView.measuredWidth + convertDpToPx(5)
-        } else {
-            0
-        }
+                ) - clearSubjectImageView.sizeForVisible {
+                        clearSubjectImageView.measuredWidth + convertDpToPx(5)
+                    }
 
         subjectEditText.measure(
             MeasureSpec.makeMeasureSpec(objectEditTextWidth, MeasureSpec.EXACTLY),

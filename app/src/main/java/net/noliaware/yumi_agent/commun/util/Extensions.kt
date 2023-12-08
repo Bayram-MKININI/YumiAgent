@@ -19,8 +19,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.*
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
@@ -377,6 +379,10 @@ fun Context?.toast(
     Toast.makeText(it, textId, duration).show()
 }
 
+fun Context.getFontFromResources(
+    fontRes: Int
+) = ResourcesCompat.getFont(this, fontRes)
+
 fun View.layoutToTopLeft(
     left: Int,
     top: Int
@@ -411,6 +417,14 @@ fun View.layoutToBottomRight(
     val left = right - measuredWidth
     val top = bottom - measuredHeight
     layout(left, top, right, bottom)
+}
+
+fun View.sizeForVisible(
+    visibleSize: () -> Int
+) = if (isVisible) {
+    visibleSize.invoke()
+} else {
+    0
 }
 
 fun View.getLocationRectOnScreen(): Rect {
