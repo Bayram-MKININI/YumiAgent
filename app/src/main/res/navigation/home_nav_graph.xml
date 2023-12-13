@@ -18,6 +18,12 @@
             app:destination="@id/bo_sign_in_fragment" />
     </fragment>
 
+    <action
+        android:id="@+id/action_go_to_AuthFragment"
+        app:destination="@id/auth_fragment"
+        app:popUpTo="@id/auth_fragment"
+        app:popUpToInclusive="true" />
+
     <dialog
         android:id="@+id/bo_sign_in_fragment"
         android:name="net.noliaware.yumi_agent.feature_auth.presentation.controllers.BOSignInFragment"
@@ -36,6 +42,12 @@
             android:id="@+id/action_UserProfileFragment_to_PrivacyPolicyFragment"
             app:destination="@id/privacy_policy_fragment" />
     </fragment>
+
+    <action
+        android:id="@+id/action_go_to_UserProfileFragment"
+        app:destination="@id/user_profile_fragment"
+        app:popUpTo="@id/user_profile_fragment"
+        app:popUpToInclusive="true" />
 
     <dialog
         android:id="@+id/privacy_policy_fragment"
@@ -68,6 +80,12 @@
             android:id="@+id/action_MessagingFragment_to_ReadOutboxMailFragment"
             app:destination="@id/read_outbox_mail_fragment" />
     </fragment>
+
+    <action
+        android:id="@+id/action_go_to_MessagingFragment"
+        app:destination="@id/messaging_fragment"
+        app:popUpTo="@id/messaging_fragment"
+        app:popUpToInclusive="true" />
 
     <dialog
         android:id="@+id/send_mail_fragment"
@@ -117,4 +135,10 @@
         android:name="net.noliaware.yumi_agent.feature_alerts.presentation.controllers.AlertsFragment"
         android:label="@string/alerts_fragment_screen_label"
         tools:layout="@layout/alerts_layout" />
+
+    <action
+        android:id="@+id/action_go_to_AlertsFragment"
+        app:destination="@id/alerts_fragment"
+        app:popUpTo="@id/alerts_fragment"
+        app:popUpToInclusive="true" />
 </navigation>

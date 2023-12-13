@@ -91,6 +91,7 @@ class AuthFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        authView?.callback = null
         authView = null
         super.onDestroyView()
     }

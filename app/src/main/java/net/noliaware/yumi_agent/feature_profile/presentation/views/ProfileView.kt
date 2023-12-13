@@ -13,7 +13,6 @@ import net.noliaware.yumi_agent.commun.util.getFontFromResources
 import net.noliaware.yumi_agent.commun.util.layoutToTopLeft
 import net.noliaware.yumi_agent.commun.util.layoutToTopRight
 import net.noliaware.yumi_agent.commun.util.measureWrapContent
-import net.noliaware.yumi_agent.commun.util.weak
 import kotlin.math.max
 
 class ProfileView @JvmOverloads constructor(
@@ -47,7 +46,7 @@ class ProfileView @JvmOverloads constructor(
     private lateinit var contributorsTitleTextView: TextView
     private lateinit var contributorsValueFillableTextWidget: FillableTextWidget
     private lateinit var privacyPolicyLinkTextView: TextView
-    var callback: ProfileViewCallback? by weak()
+    var callback: ProfileViewCallback? = null
 
     data class ProfileViewAdapter(
         val login: String = "",

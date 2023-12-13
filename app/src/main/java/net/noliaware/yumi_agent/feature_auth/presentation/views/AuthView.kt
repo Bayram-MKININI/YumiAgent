@@ -16,7 +16,6 @@ import net.noliaware.yumi_agent.commun.util.layoutToBottomLeft
 import net.noliaware.yumi_agent.commun.util.layoutToTopLeft
 import net.noliaware.yumi_agent.commun.util.measureWrapContent
 import net.noliaware.yumi_agent.commun.util.sizeForVisible
-import net.noliaware.yumi_agent.commun.util.weak
 import kotlin.math.roundToInt
 
 class AuthView @JvmOverloads constructor(
@@ -34,7 +33,7 @@ class AuthView @JvmOverloads constructor(
     private lateinit var boAccessTextView: TextView
     private lateinit var boAccessDescriptionTextView: TextView
     private lateinit var accessButtonLayout: LinearLayoutCompat
-    var callback: AuthViewCallback? by weak()
+    var callback: AuthViewCallback? = null
 
     data class AuthViewAdapter(
         val twoFactorAuthModeText: String = "",

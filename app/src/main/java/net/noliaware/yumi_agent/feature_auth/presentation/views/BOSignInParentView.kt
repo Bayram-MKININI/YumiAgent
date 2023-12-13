@@ -19,9 +19,9 @@ class BOSignInParentView @JvmOverloads constructor(
     private lateinit var profileIconView: View
     private lateinit var backView: View
     private lateinit var boSignInView: BOSignInView
-    val getBoSignInView get() = boSignInView
+    var callback: BOSignInViewCallback? = null
 
-    var callback: BOSignInViewCallback? by weak()
+    val getBoSignInView get() = boSignInView
 
     fun interface BOSignInViewCallback {
         fun onBackButtonClicked()

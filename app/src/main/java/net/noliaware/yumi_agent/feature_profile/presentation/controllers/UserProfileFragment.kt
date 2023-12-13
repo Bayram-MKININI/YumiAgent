@@ -109,6 +109,7 @@ class UserProfileFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        profileDataParentView?.getProfileView?.callback = null
         profileDataParentView = null
         super.onDestroyView()
     }
