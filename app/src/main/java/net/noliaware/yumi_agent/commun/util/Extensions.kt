@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Rect
+import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
@@ -17,9 +18,16 @@ import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.*
+import androidx.annotation.CheckResult
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
+import androidx.annotation.Dimension
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
@@ -47,7 +55,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import net.noliaware.yumi_agent.BuildConfig
 import net.noliaware.yumi_agent.R
-import net.noliaware.yumi_agent.commun.*
 import net.noliaware.yumi_agent.commun.ApiParameters.APP_VERSION
 import net.noliaware.yumi_agent.commun.ApiParameters.DEVICE_ID
 import net.noliaware.yumi_agent.commun.ApiParameters.LOGIN
@@ -61,7 +68,8 @@ import net.noliaware.yumi_agent.commun.data.remote.dto.ErrorDTO
 import net.noliaware.yumi_agent.commun.data.remote.dto.SessionDTO
 import net.noliaware.yumi_agent.commun.domain.model.AppMessageType
 import net.noliaware.yumi_agent.commun.domain.model.SessionData
-import net.noliaware.yumi_agent.commun.util.ErrorUI.*
+import net.noliaware.yumi_agent.commun.util.ErrorUI.ErrUINetwork
+import net.noliaware.yumi_agent.commun.util.ErrorUI.ErrUISystem
 import retrofit2.HttpException
 import java.io.IOException
 import java.math.BigInteger
@@ -71,7 +79,7 @@ import java.security.NoSuchAlgorithmException
 import java.security.SecureRandom
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 fun isNetworkReachable(
     context: Context
@@ -260,7 +268,6 @@ fun Fragment.handleSharedEvent(
                             show()
                         }
                 }
-
                 AppMessageType.SNACKBAR -> {
                     Snackbar.make(
                         requireView(),
@@ -268,11 +275,9 @@ fun Fragment.handleSharedEvent(
                         Snackbar.LENGTH_LONG
                     ).show()
                 }
-
                 AppMessageType.TOAST -> {
                     context.toast(appMessage.body)
                 }
-
                 else -> Unit
             }
         }
@@ -528,6 +533,17 @@ fun String.sha256(): String {
 fun Context.getColorCompat(
     @ColorRes colorRes: Int
 ) = ContextCompat.getColor(this, colorRes)
+
+fun Context.getDrawableCompat(
+    @DrawableRes drawableRes: Int
+) = AppCompatResources.getDrawable(this, drawableRes)
+
+@CheckResult
+fun Drawable.tint(
+    @ColorInt color: Int
+) = DrawableCompat.wrap(this).mutate().apply {
+    DrawableCompat.setTint(this, color)
+}
 
 fun Number.formatNumber(): String = NumberFormat.getNumberInstance(Locale.getDefault()).format(this)
 
