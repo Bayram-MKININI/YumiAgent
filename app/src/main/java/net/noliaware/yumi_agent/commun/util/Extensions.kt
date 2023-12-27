@@ -263,10 +263,7 @@ fun Fragment.handleSharedEvent(
                             dialog.dismiss()
                         }
                         .setCancelable(false)
-                        .create().apply {
-                            setCanceledOnTouchOutside(false)
-                            show()
-                        }
+                        .show()
                 }
                 AppMessageType.SNACKBAR -> {
                     Snackbar.make(
