@@ -1,15 +1,14 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.YumiAgent" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.YumiAgent" parent="Theme.Material3.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorPrimaryLight</item>
         <item name="colorOnPrimary">@android:color/white</item>
+        <item name="colorPrimaryContainer">@android:color/white</item>
+        <item name="colorOnPrimaryContainer">@color/grey_2</item>
+        <item name="colorSecondary">@color/colorPrimaryLight</item>
         <item name="colorOnSecondary">@android:color/white</item>
         <item name="colorError">@color/red_1</item>
-        <item name="colorSurface">@android:color/white</item>
-        <item name="colorOnSurface">@color/grey_2</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
     </style>
@@ -32,9 +31,13 @@
         <item name="cornerSize">7dp</item>
     </style>
 
-    <style name="FullScreenDialogTheme" parent="ThemeOverlay.MaterialComponents.Light">
+    <style name="FullScreenDialogTheme" parent="ThemeOverlay.Material3.Light">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowIsFloating">false</item>
+    </style>
+
+    <style name="AlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="android:background">@android:color/white</item>
     </style>
 </resources>

@@ -255,7 +255,7 @@ fun Fragment.handleSharedEvent(
             val appMessage = sharedEvent.appMessage
             when (appMessage.type) {
                 AppMessageType.POPUP -> {
-                    MaterialAlertDialogBuilder(it)
+                    MaterialAlertDialogBuilder(it, R.style.AlertDialog)
                         .setTitle(appMessage.title)
                         .setMessage(appMessage.body)
                         .setPositiveButton(R.string.ok, null)
