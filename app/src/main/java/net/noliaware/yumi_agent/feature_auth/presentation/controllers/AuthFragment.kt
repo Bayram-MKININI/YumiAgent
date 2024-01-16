@@ -1,6 +1,7 @@
 package net.noliaware.yumi_agent.feature_auth.presentation.controllers
 
 import android.os.Bundle
+import android.text.SpannableString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import net.noliaware.yumi_agent.R
 import net.noliaware.yumi_agent.commun.DateTime.DAY_OF_MONTH_TEXT_DATE_FORMAT
 import net.noliaware.yumi_agent.commun.DateTime.HOURS_TIME_FORMAT
+import net.noliaware.yumi_agent.commun.util.DecoratedText
+import net.noliaware.yumi_agent.commun.util.decorateWords
+import net.noliaware.yumi_agent.commun.util.getFontFromResources
 import net.noliaware.yumi_agent.commun.util.parseTimestampToDate
 import net.noliaware.yumi_agent.commun.util.safeNavigate
 import net.noliaware.yumi_agent.feature_auth.presentation.views.AuthView
@@ -45,20 +49,30 @@ class AuthFragment : Fragment() {
 
     private fun bindViewToData(accountData: AccountData) {
         authView?.setUserData(
-            helloText = accountData.helloMessage,
-            userName = accountData.userName,
-            lastLoginTitle = accountData.lastConnectionTimestamp?.let {
-                getString(R.string.last_login)
-            } ?: getString(R.string.welcome_to_yumi),
-            lastLoginValue = accountData.lastConnectionTimestamp?.let {
-                getString(
-                    R.string.last_login_value,
-                    it.parseTimestampToDate(DAY_OF_MONTH_TEXT_DATE_FORMAT),
-                    it.parseTimestampToDate(HOURS_TIME_FORMAT)
+            helloText = getString(
+                R.string.hello_user_format,
+                accountData.helloMessage,
+                accountData.userName
+            ).decorateWords(
+                wordsToDecorate = listOf(
+                    decorateTextWithFont(accountData.userName),
                 )
-            }
+            ),
+            lastLogin = accountData.lastConnectionTimestamp?.let {
+                val date = it.parseTimestampToDate(DAY_OF_MONTH_TEXT_DATE_FORMAT)
+                val time = it.parseTimestampToDate(HOURS_TIME_FORMAT)
+                getString(
+                    R.string.last_login,
+                    date,
+                    time
+                ).decorateWords(
+                    wordsToDecorate = listOf(
+                        decorateTextWithFont(date),
+                        decorateTextWithFont(time)
+                    )
+                )
+            } ?: SpannableString(getString(R.string.welcome_to_yumi))
         )
-
         AuthViewAdapter(
             twoFactorAuthModeText = map2FAModeText(accountData.twoFactorAuthMode),
             twoFactorAuthModeActivated = map2FAModeActivation(accountData.twoFactorAuthMode),
@@ -66,6 +80,13 @@ class AuthFragment : Fragment() {
             authView?.fillViewWithData(it)
         }
     }
+
+    private fun decorateTextWithFont(
+        date: String
+    ) = DecoratedText(
+        textToDecorate = date,
+        typeface = context?.getFontFromResources(R.font.omnes_medium)
+    )
 
     private fun map2FAModeText(
         twoFactorAuthMode: TFAMode

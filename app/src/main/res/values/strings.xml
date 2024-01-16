@@ -23,9 +23,9 @@
     //Authentification
     <string name="privacy_policy">Politique de confidentialité</string>
     <string name="policy_confirmation">J\'ai lu et j\'accepte</string>
-    <string name="last_login">Dernière connexion:</string>
+    <string name="hello_user_format">%s %s</string>
+    <string name="last_login">Dernière connexion: %s à %s</string>
     <string name="welcome_to_yumi">Bienvenue dans Yumi !</string>
-    <string name="last_login_value">%s à %s</string>
     <string name="bo_access">Accès application web</string>
     <string name="bo_two_factor_auth_none">La double authentification sur l\'application web est désactivée</string>
     <string name="bo_two_factor_auth_by_app">Génerer un code d\'accès à votre compte sur l\'application web</string>
