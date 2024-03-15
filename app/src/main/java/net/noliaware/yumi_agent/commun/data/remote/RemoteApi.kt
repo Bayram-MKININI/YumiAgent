@@ -1,6 +1,5 @@
 package net.noliaware.yumi_agent.commun.data.remote
 
-import net.noliaware.yumi_agent.commun.*
 import net.noliaware.yumi_agent.commun.ApiConstants.CONNECT
 import net.noliaware.yumi_agent.commun.ApiConstants.DELETE_INBOX_MESSAGE
 import net.noliaware.yumi_agent.commun.ApiConstants.DELETE_OUTBOX_MESSAGE
@@ -23,8 +22,14 @@ import net.noliaware.yumi_agent.feature_auth.data.remote.dto.BOSignInDTO
 import net.noliaware.yumi_agent.feature_auth.data.remote.dto.UpdatePrivacyPolicyResponseDTO
 import net.noliaware.yumi_agent.feature_login.data.remote.dto.AccountDataDTO
 import net.noliaware.yumi_agent.feature_login.data.remote.dto.InitDTO
-import net.noliaware.yumi_agent.feature_message.data.remote.dto.*
-import net.noliaware.yumi_agent.feature_profile.data.remote.dto.*
+import net.noliaware.yumi_agent.feature_message.data.remote.dto.DeleteInboxMessageDTO
+import net.noliaware.yumi_agent.feature_message.data.remote.dto.DeleteOutboxMessageDTO
+import net.noliaware.yumi_agent.feature_message.data.remote.dto.InboxMessageDTO
+import net.noliaware.yumi_agent.feature_message.data.remote.dto.InboxMessagesDTO
+import net.noliaware.yumi_agent.feature_message.data.remote.dto.OutboxMessageDTO
+import net.noliaware.yumi_agent.feature_message.data.remote.dto.OutboxMessagesDTO
+import net.noliaware.yumi_agent.feature_message.data.remote.dto.SentMessageDTO
+import net.noliaware.yumi_agent.feature_profile.data.remote.dto.UserAccountDTO
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
